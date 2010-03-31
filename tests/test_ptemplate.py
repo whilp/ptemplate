@@ -28,8 +28,10 @@ and some more text
 and something after the section
 """
 
+    def format(self, string, *args, **kwargs):
+        return self.formatter.format(string, *args, **kwargs)
+
     def test_standard_formatter(self):
         data = {"bar": 1}
         input = "foo {bar}"
-        pformat = self.formatter.format(input, **data)
-        self.assertEqual(pformat, input.format(**data))
+        self.assertEqual(self.format(input, **data), input.format(**data))
