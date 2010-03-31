@@ -2,9 +2,9 @@
 %PROJECT%
 """
 
-__project__ = "%PROJECT%"
+__project__ = "ptemplate"
 __version__ = "0.1"
-__package__ = "project"
+__pkg__ = "ptemplate"
 __description__ = ""
 __author__ = ""
 __author_email__ = ""
@@ -35,3 +35,5 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 __todo__ = """\
 """
+
+from ptemplate import *
