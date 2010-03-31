@@ -46,6 +46,8 @@ class PFormatter(Formatter):
                 data = scopes[0].get(field[1:], [])
                 section = []
             elif marker == "endsection":
+                if section is None:
+                    raise SyntaxError(field)
                 for d in data:
                     result.append(self.formatsection(section, d, *scopes))
                 section = None
