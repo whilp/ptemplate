@@ -62,35 +62,3 @@ class PFormatter(Formatter):
             except KeyError:
                 continue
         return ''
-
-data = {
-    "foo": "the foo",
-    "results": [
-        {"thisis": "letters", "one": "a", "two": "b"},
-        {"thisis": "digits", "one": "1", "two": "2"},
-    ]
-}
-
-input = """
-{% this is a comment}
-la la la
-{dne}
-{#results}
-this is: {thisis}
-this is from a different scope: {foo}
-
-one: {one}
-two: {two}
-and some more text
-{/results}
-and something after the section
-"""
-
-# http://google-ctemplate.googlecode.com/svn/trunk/doc/example.html
-
-if __name__ == "__main__":
-    from pprint import pprint
-    formatter = PFormatter()
-    #print "this doesn't exist: ->{dne}<-".format(**{"foo": 1})
-    #pprint(list(formatter.parse(input)))
-    print formatter.format(input, **data)
