@@ -1,5 +1,7 @@
 from string import Formatter
 
+__all__ = ["PFormatter"]
+
 class PFormatter(Formatter):
     markers = {
         '#': "startsection",
