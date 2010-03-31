@@ -13,7 +13,7 @@ class PFormatter(Formatter):
 
         return self.formatsection(self.parse(format_string), kwargs)
 
-    def formatsection(self, tokenstream, kwargs):
+    def formatsection(self, tokenstream, *scopes):
         result = []
         section = None
         data = None
@@ -32,9 +32,9 @@ class PFormatter(Formatter):
 
             # Handle the normal case first.
             if section is None and marker is None:
-                obj, _ = self.get_field(field, (), kwargs)
+                obj, _ = self.get_field(field, (), scopes)
                 obj = self.convert_field(obj, conversion)
-                spec = self._vformat(spec, (), kwargs, (), 1)
+                spec = self._vformat(spec, (), scopes[-1], (), 1)
                 result.append(self.format_field(obj, spec))
                 continue
 
@@ -43,14 +43,54 @@ class PFormatter(Formatter):
             if marker == "comment":
                 continue
             elif marker == "startsection":
-                data = kwargs[field[1:]]
+                data = scopes[0].get(field[1:], [])
                 section = []
             elif marker == "endsection":
                 for d in data:
-                    result.append(self.formatsection(section, d))
+                    result.append(self.formatsection(section, d, *scopes))
                 section = None
 
             if section is not None and marker != "startsection":
                 section.append((text, field, spec, conversion))
 
         return ''.join(result)
+
+    def get_value(self, field, args, scopes):
+        for scope in scopes:
+            try:
+                return super(PFormatter, self).get_value(field, args, scope)
+            except KeyError:
+                continue
+        return ''
+
+data = {
+    "foo": "the foo",
+    "results": [
+        {"thisis": "letters", "one": "a", "two": "b"},
+        {"thisis": "digits", "one": "1", "two": "2"},
+    ]
+}
+
+input = """
+{% this is a comment}
+la la la
+{dne}
+{#results}
+this is: {thisis}
+this is from a different scope: {foo}
+
+one: {one}
+two: {two}
+and some more text
+{/results}
+and something after the section
+"""
+
+# http://google-ctemplate.googlecode.com/svn/trunk/doc/example.html
+
+if __name__ == "__main__":
+    from pprint import pprint
+    formatter = PFormatter()
+    #print "this doesn't exist: ->{dne}<-".format(**{"foo": 1})
+    #pprint(list(formatter.parse(input)))
+    print formatter.format(input, **data)
