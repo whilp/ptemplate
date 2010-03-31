@@ -16,7 +16,6 @@ class TestPFormatter(BaseTest):
         self.input = """\
 {% this is a comment}
 la la la
-{/dne}
 {#results}
 this is: {thisis}
 this is from a different scope: {foo}
@@ -35,3 +34,24 @@ and something after the section
         data = {"bar": 1}
         input = "foo {bar}"
         self.assertEqual(self.format(input, **data), input.format(**data))
+
+    def test_nonexistent_keys(self):
+        self.assertEqual(self.format("{dne}"), "")
+
+    def test_markers_comment(self):
+        self.assertEqual(self.format("{% this is a comment}"), "")
+        self.assertEqual(self.format("{%this is a comment}"), "")
+
+    def test_smorgasbord(self):
+        self.assertEqual(self.format(self.input, **self.data), 
+            '\n'.join([
+            "\nla la la\n",
+            "this is: letters",
+            "this is from a different scope: the foo\n",
+            "one: a",
+            "two: b",
+            "this is: digits",
+            "this is from a different scope: the foo\n",
+            "one: 1",
+            "two: 2",
+            "and something after the section\n"]))
