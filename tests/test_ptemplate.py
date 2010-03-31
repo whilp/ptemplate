@@ -29,5 +29,7 @@ and something after the section
 """
 
     def test_standard_formatter(self):
-        out = self.formatter.format("foo")
-        self.assertEqual(out, "foo")
+        data = {"bar": 1}
+        input = "foo {bar}"
+        pformat = self.formatter.format(input, **data)
+        self.assertEqual(pformat, input.format(**data))
