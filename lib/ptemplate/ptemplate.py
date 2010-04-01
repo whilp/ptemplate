@@ -8,6 +8,9 @@ class PFormatter(Formatter):
         '/': "endsection",
         '%': "comment",
     }
+    options = {
+        "swallow-return-before-marker": True,
+    }
 
     def _vformat(self, format_string, args, kwargs, used, depth):
         if depth < 0:
@@ -22,9 +25,8 @@ class PFormatter(Formatter):
             oldmarker = marker
             marker = self.markers.get(field and field[0] or '', None)
 
-            # If a marker is immediately preceded by a line-return,
-            # swallow it.
-            if marker and text and text[-1] == '\n':
+            if self.options["swallow-return-before-marker"] and \
+                marker and text and text[-1] == '\n':
                 text = text[:-1]
 
             if marker == "comment":
