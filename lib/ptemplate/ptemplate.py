@@ -20,7 +20,7 @@ class PFormatter(Formatter):
 
     def formatsection(self, tokenstream, *scopes):
         result = []
-        section = data = marker = None
+        section = data = None
         for text, field, spec, conversion in tokenstream:
             marker = self.markers.get(field and field[0] or '', None)
             fieldname = field
