@@ -23,6 +23,9 @@ class PFormatter(Formatter):
         section = data = marker = None
         for text, field, spec, conversion in tokenstream:
             marker = self.markers.get(field and field[0] or '', None)
+            fieldname = field
+            if marker is not None:
+                field = field[1:]
 
             if self.options["swallow-return-before-marker"] and \
                 marker and text and text[-1] == '\n':
@@ -31,11 +34,11 @@ class PFormatter(Formatter):
             if marker == "comment":
                 field = None
             elif marker == "startsection":
-                data = scopes[0].get(field[1:], [])
+                data = scopes[0].get(field, [])
                 section = []
             elif marker == "endsection":
                 if section is None:
-                    raise SyntaxError(field)
+                    raise SyntaxError(fieldname)
                 section.append((text, None, None, None))
                 for d in data:
                     result.append(self.formatsection(section, d, *scopes))
@@ -47,7 +50,7 @@ class PFormatter(Formatter):
             elif text:
                 result.append(text)
 
-            if field is None or section is not None:
+            if marker or field is None or section is not None:
                 continue
 
             obj, _ = self.get_field(field, (), scopes)
