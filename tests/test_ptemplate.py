@@ -6,26 +6,6 @@ class TestPFormatter(BaseTest):
 
     def setUp(self):
         self.formatter = PFormatter()
-        self.data = {
-            "foo": "the foo",
-            "results": [
-                {"thisis": "letters", "one": "a", "two": "b"},
-                {"thisis": "digits", "one": "1", "two": "2"},
-            ]
-        }
-        self.input = """\
-{% this is a comment}
-la la la
-{#results}
-this is: {thisis}
-this is from a different scope: {foo}
-
-one: {one}
-two: {two}
-and some more text
-{/results}
-and something after the section
-"""
 
     def format(self, string, *args, **kwargs):
         return self.formatter.format(string, *args, **kwargs)
@@ -56,19 +36,42 @@ and something after the section
             "some more text",
             "{/section}",
             "and after the section"])
-        self.assertEqual(self.format(input, **data), '')
-
+        output = '\n'.join([
+            "before the section\n",
+            "inside the section",
+            "some more text\n",
+            "and after the section"])
+        self.assertEqual(self.format(input, **data), output)
 
     def test_smorgasbord(self):
-        self.assertEqual(self.format(self.input, **self.data), 
-            '\n'.join([
+        data = {
+            "foo": "the foo",
+            "results": [
+                {"thisis": "letters", "one": "a", "two": "b"},
+                {"thisis": "digits", "one": "1", "two": "2"},
+            ]
+        }
+        input = '\n'.join([
+            "{% this is a comment}",
+            "la la la",
+            "{#results}",
+            "this is: {thisis}",
+            "this is from a different scope: {foo}",
+            "one: {one}",
+            "two: {two}",
+            "and some more text",
+            "{/results}",
+            "and something after the section"])
+        output = '\n'.join([
             "\nla la la\n",
             "this is: letters",
-            "this is from a different scope: the foo\n",
+            "this is from a different scope: the foo",
             "one: a",
             "two: b",
             "this is: digits",
-            "this is from a different scope: the foo\n",
+            "this is from a different scope: the foo",
             "one: 1",
             "two: 2",
-            "and something after the section\n"]))
+            "and something after the section",
+        ])
+        self.assertEqual(output, self.format(input, **data))
