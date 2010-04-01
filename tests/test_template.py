@@ -1,26 +1,21 @@
-from tests import BaseTest
+from tests import TemplateTest
 
 from ptemplate import Template
 
-class TestTemplate(BaseTest):
-
-    def setUp(self):
-        self.template = Template()
-
-    def format(self, string, *args, **kwargs):
-        return self.template.format(string, *args, **kwargs)
+class TestTemplate(TemplateTest):
+    cls = Template
 
     def test_standard_template(self):
-        data = {"bar": 1}
         input = "foo {bar}"
-        self.assertEqual(input.format(**data), self.format(input, **data))
+        data = {"bar": 1}
+        self.produces(input, input.format(**data), data)
 
     def test_nonexistent_keys(self):
-        self.assertEqual("", self.format("{dne}"))
+        self.produces("{dne}", "")
 
     def test_markers_comment(self):
-        self.assertEqual("", self.format("{% this is a comment}"))
-        self.assertEqual("", self.format("{%this is a comment}"))
+        self.produces("{% this is a comment}", "")
+        self.produces("{%this is a comment}", "")
 
     def test_sections_simple(self):
         data = {
@@ -44,7 +39,7 @@ class TestTemplate(BaseTest):
             "inside the section",
             "some more text",
             "and after the section"])
-        self.assertEqual(output, self.format(input, **data))
+        self.produces(input, output, data)
 
     def skip_test_sections_nested(self):
         data = {
@@ -68,7 +63,7 @@ class TestTemplate(BaseTest):
             "inner contents",
             "outer finish",
             "end"])
-        self.assertEqual(output, self.format(input, **data))
+        self.produces(input, output, data)
 
     def test_sections_nodata(self):
         data = {}
@@ -81,7 +76,7 @@ class TestTemplate(BaseTest):
         output = '\n'.join([
             "beginning",
             "end"])
-        self.assertEqual(output, self.format(input, **data))
+        self.produces(input, output, data)
 
     def test_smorgasbord(self):
         data = {
@@ -116,4 +111,4 @@ class TestTemplate(BaseTest):
             "and some more text",
             "and something after the section",
         ])
-        self.assertEqual(output, self.format(input, **data))
+        self.produces(input, output, data)
