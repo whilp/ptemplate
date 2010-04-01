@@ -80,3 +80,16 @@ class TestPFormatter(BaseTest):
             "and something after the section",
         ])
         self.assertEqual(output, self.format(input, **data))
+
+    def test_sections_nodata(self):
+        data = {}
+        input = '\n'.join([
+            "beginning",
+            "{#section}",
+            "middle",
+            "{/section}",
+            "end"])
+        output = '\n'.join([
+            "beginning",
+            "end"])
+        self.assertEqual(output, self.format(input, **data))
