@@ -22,7 +22,7 @@ class TestPFormatter(BaseTest):
         self.assertEqual("", self.format("{% this is a comment}"))
         self.assertEqual("", self.format("{%this is a comment}"))
 
-    def test_markers_section_simple(self):
+    def test_sections_simple(self):
         data = {
             "section": [
                 {"a":"b"}, {}, {},
@@ -44,6 +44,20 @@ class TestPFormatter(BaseTest):
             "inside the section",
             "some more text",
             "and after the section"])
+        self.assertEqual(output, self.format(input, **data))
+
+
+    def test_sections_nodata(self):
+        data = {}
+        input = '\n'.join([
+            "beginning",
+            "{#section}",
+            "middle",
+            "{/section}",
+            "end"])
+        output = '\n'.join([
+            "beginning",
+            "end"])
         self.assertEqual(output, self.format(input, **data))
 
     def test_smorgasbord(self):
@@ -79,17 +93,4 @@ class TestPFormatter(BaseTest):
             "and some more text",
             "and something after the section",
         ])
-        self.assertEqual(output, self.format(input, **data))
-
-    def test_sections_nodata(self):
-        data = {}
-        input = '\n'.join([
-            "beginning",
-            "{#section}",
-            "middle",
-            "{/section}",
-            "end"])
-        output = '\n'.join([
-            "beginning",
-            "end"])
         self.assertEqual(output, self.format(input, **data))
