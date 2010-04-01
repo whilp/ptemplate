@@ -76,6 +76,7 @@ class Template(Formatter):
         sections = []
         data = None
         for text, field, spec, conversion in tokenstream:
+            print "\n>0> LOOP"
             if field is not None:
                 field = Field(field)
 
@@ -83,12 +84,14 @@ class Template(Formatter):
                 field and field.marker and text and text[-1] == '\n':
                 text = text[:-1]
 
-            print ">1>", sections
-            text, field, newresult, sections, data = \
+            print ">1>", data, repr(text)
+            text, field, newresult, sections, newdata = \
                 self.handle_markers(text, field, sections, data, scopes)
             if newresult:
                 result.append(newresult)
-            print ">2>", sections
+            if newdata is not None:
+                data = newdata
+            print ">2>", data, repr(text)
 
             section = sections and sections[-1] or None
 
