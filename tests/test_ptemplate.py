@@ -13,14 +13,14 @@ class TestPFormatter(BaseTest):
     def test_standard_formatter(self):
         data = {"bar": 1}
         input = "foo {bar}"
-        self.assertEqual(self.format(input, **data), input.format(**data))
+        self.assertEqual(input.format(**data), self.format(input, **data))
 
     def test_nonexistent_keys(self):
-        self.assertEqual(self.format("{dne}"), "")
+        self.assertEqual("", self.format("{dne}"))
 
     def test_markers_comment(self):
-        self.assertEqual(self.format("{% this is a comment}"), "")
-        self.assertEqual(self.format("{%this is a comment}"), "")
+        self.assertEqual("", self.format("{% this is a comment}"))
+        self.assertEqual("", self.format("{%this is a comment}"))
 
     def test_markers_section_simple(self):
         data = {
@@ -40,7 +40,7 @@ class TestPFormatter(BaseTest):
             "inside the section",
             "some more text\n",
             "and after the section"])
-        self.assertEqual(self.format(input, **data), output)
+        self.assertEqual(output, self.format(input, **data))
 
     def test_smorgasbord(self):
         data = {
