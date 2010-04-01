@@ -17,7 +17,7 @@ class Template(Formatter):
     preprocessor = None
 
     def __init__(self, input=''):
-    	self.input = ''
+        self.input = ''
 
     def render(self, *args, **data):
         return self.format(self.input, *args, **kwargs)
