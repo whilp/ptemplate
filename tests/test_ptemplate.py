@@ -36,9 +36,13 @@ class TestPFormatter(BaseTest):
             "{/section}",
             "and after the section"])
         output = '\n'.join([
-            "before the section\n",
+            "before the section",
             "inside the section",
-            "some more text\n",
+            "some more text",
+            "inside the section",
+            "some more text",
+            "inside the section",
+            "some more text",
             "and after the section"])
         self.assertEqual(output, self.format(input, **data))
 
@@ -62,15 +66,17 @@ class TestPFormatter(BaseTest):
             "{/results}",
             "and something after the section"])
         output = '\n'.join([
-            "\nla la la\n",
+            "\nla la la",
             "this is: letters",
             "this is from a different scope: the foo",
             "one: a",
             "two: b",
+            "and some more text",
             "this is: digits",
             "this is from a different scope: the foo",
             "one: 1",
             "two: 2",
+            "and some more text",
             "and something after the section",
         ])
         self.assertEqual(output, self.format(input, **data))
