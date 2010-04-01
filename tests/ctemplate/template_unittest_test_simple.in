@@ -1,8 +1,8 @@
 <html>
 <head>
-  {HEAD}
+  {{HEAD}}
 </head>
 <body>
-  {BODY}
+  {{BODY}}
 </body>
-</html>{BI_NEWLINE}
+</html>{{BI_NEWLINE}}
