@@ -22,7 +22,6 @@ class PFormatter(Formatter):
         result = []
         section = data = marker = None
         for text, field, spec, conversion in tokenstream:
-            oldmarker = marker
             marker = self.markers.get(field and field[0] or '', None)
 
             if self.options["swallow-return-before-marker"] and \
