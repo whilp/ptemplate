@@ -13,7 +13,7 @@ class TemplateTest(BaseTest):
     def setUp(self):
         self.template = self.cls()
 
-    def produces(self, input, expect, kwargs={}, args=()):
+    def assertProduces(self, input, expect, kwargs={}, args=()):
         output = self.template.format(input, *args, **kwargs)
         self.assertEqual(expect, output)
 

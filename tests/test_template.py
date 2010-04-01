@@ -8,14 +8,14 @@ class TestTemplate(TemplateTest):
     def test_standard_template(self):
         input = "foo {bar}"
         data = {"bar": 1}
-        self.produces(input, input.format(**data), data)
+        self.assertProduces(input, input.format(**data), data)
 
     def test_nonexistent_keys(self):
-        self.produces("{dne}", "")
+        self.assertProduces("{dne}", "")
 
     def test_markers_comment(self):
-        self.produces("{% this is a comment}", "")
-        self.produces("{%this is a comment}", "")
+        self.assertProduces("{% this is a comment}", "")
+        self.assertProduces("{%this is a comment}", "")
 
     def test_sections_simple(self):
         data = {
@@ -39,7 +39,7 @@ class TestTemplate(TemplateTest):
             "inside the section",
             "some more text",
             "and after the section"])
-        self.produces(input, output, data)
+        self.assertProduces(input, output, data)
 
     def skip_test_sections_nested(self):
         data = {
@@ -63,7 +63,7 @@ class TestTemplate(TemplateTest):
             "inner contents",
             "outer finish",
             "end"])
-        self.produces(input, output, data)
+        self.assertProduces(input, output, data)
 
     def test_sections_nodata(self):
         data = {}
@@ -76,7 +76,7 @@ class TestTemplate(TemplateTest):
         output = '\n'.join([
             "beginning",
             "end"])
-        self.produces(input, output, data)
+        self.assertProduces(input, output, data)
 
     def test_smorgasbord(self):
         data = {
@@ -111,4 +111,4 @@ class TestTemplate(TemplateTest):
             "and some more text",
             "and something after the section",
         ])
-        self.produces(input, output, data)
+        self.assertProduces(input, output, data)
