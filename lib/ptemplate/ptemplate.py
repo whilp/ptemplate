@@ -1,6 +1,9 @@
+from collections import namedtuple
 from string import Formatter
 
 __all__ = ["PFormatter"]
+
+Section = namedtuple("Section", "name items")
 
 class PFormatter(Formatter):
     markers = {
@@ -20,7 +23,7 @@ class PFormatter(Formatter):
 
     def formatsection(self, tokenstream, *scopes):
         result = []
-        sections = {}
+        sections = []
         data = None
         for text, field, spec, conversion in tokenstream:
             marker = self.markers.get(field and field[0] or '', None)
@@ -36,22 +39,25 @@ class PFormatter(Formatter):
                 field = None
             elif marker == "startsection":
                 data = scopes[0].get(field, [])
-                sections["a"] = []
+                sections.append(Section(field, []))
             elif marker == "endsection":
-                if not "a" in sections:
+                if not sections or sections[-1].name != field:
                     raise SyntaxError(fieldname)
-                sections["a"].append((text, None, None, None))
+                section = sections[-1]
+                section.items.append((text, None, None, None))
                 for d in data:
-                    result.append(self.formatsection(sections["a"], d, *scopes))
-                del(sections["a"])
+                    result.append(self.formatsection(section.items, d, *scopes))
+                del(sections[-1])
                 text = ''
 
-            if "a" in sections and marker != "startsection":
-                sections["a"].append((text, field, spec, conversion))
+            section = sections and sections[-1] or None
+
+            if section is not None and marker != "startsection":
+                section.items.append((text, field, spec, conversion))
             elif text:
                 result.append(text)
 
-            if marker or field is None or "a" in sections:
+            if marker or field is None or section is not None:
                 continue
 
             obj, _ = self.get_field(field, (), scopes)
