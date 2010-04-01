@@ -22,3 +22,13 @@ class TestCTemplate(TemplateTest):
 
     def test_comment(self):
         self.produces("hi {{!VAR}} lo", "hi  lo")
+        self.produces("hi {{!VAR {VAR} }} lo", "hi  lo")
+        # XXX
+        #self.produces("hi {{! VAR {{!VAR} }} lo", "hi  lo")
+
+    # Skipping TestSetMarkerDelimiters; no plans to support that feature.
+
+    def test_variable(self):
+        data = {}
+        input = "hi {{VAR}} lo"
+        self.produces(input, "hi  lo", data)
