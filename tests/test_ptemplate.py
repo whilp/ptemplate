@@ -1,16 +1,16 @@
 from tests import BaseTest
 
-from ptemplate import PFormatter
+from ptemplate import Template
 
-class TestPFormatter(BaseTest):
+class TestTemplate(BaseTest):
 
     def setUp(self):
-        self.formatter = PFormatter()
+        self.template = Template()
 
     def format(self, string, *args, **kwargs):
-        return self.formatter.format(string, *args, **kwargs)
+        return self.template.format(string, *args, **kwargs)
 
-    def test_standard_formatter(self):
+    def test_standard_template(self):
         data = {"bar": 1}
         input = "foo {bar}"
         self.assertEqual(input.format(**data), self.format(input, **data))

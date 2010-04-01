@@ -1,11 +1,11 @@
 from collections import namedtuple
 from string import Formatter
 
-__all__ = ["PFormatter"]
+__all__ = ["Template"]
 
 Section = namedtuple("Section", "name items")
 
-class PFormatter(Formatter):
+class Template(Formatter):
     markers = {
         '#': "startsection",
         '/': "endsection",
@@ -74,7 +74,7 @@ class PFormatter(Formatter):
     def get_value(self, field, args, scopes):
         for scope in scopes:
             try:
-                return super(PFormatter, self).get_value(field, args, scope)
+                return super(Template, self).get_value(field, args, scope)
             except KeyError:
                 continue
         return ''
