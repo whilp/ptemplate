@@ -5,12 +5,31 @@ __all__ = ["Template"]
 
 Section = namedtuple("Section", "name items")
 
-class Template(Formatter):
+class Field(object):
     markers = {
         '#': "startsection",
         '/': "endsection",
         '%': "comment",
     }
+    markerlen = 1
+    
+    def __init__(self, full):
+        self.full = full
+
+    @property
+    def name(self):
+        if self.marker is None:
+            return self.full
+        return self.full[self.markerlen:]
+
+    @property
+    def marker(self):
+        marker = None
+        if len(self.full) >= self.markerlen:
+            marker = self.full[:self.markerlen]
+        return self.markers.get(marker, None)
+        
+class Template(Formatter):
     options = {
         "swallow-return-before-marker": True,
     }
@@ -36,7 +55,7 @@ class Template(Formatter):
         sections = []
         data = None
         for text, field, spec, conversion in tokenstream:
-            marker = self.markers.get(field and field[0] or '', None)
+            marker = Field.markers.get(field and field[0] or '', None)
             fieldname = field
             if marker is not None:
                 field = field[1:]
