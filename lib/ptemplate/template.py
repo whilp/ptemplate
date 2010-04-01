@@ -54,10 +54,6 @@ class Template(Formatter):
         marker = field and field.marker or None
         result = ''
 
-        if self.options["swallow-return-before-marker"] and \
-            field and field.marker and text and text[-1] == '\n':
-            text = text[:-1]
-
         if marker == "comment":
             field = None
         elif marker == "startsection":
@@ -82,6 +78,10 @@ class Template(Formatter):
         for text, field, spec, conversion in tokenstream:
             if field is not None:
                 field = Field(field)
+
+            if self.options["swallow-return-before-marker"] and \
+                field and field.marker and text and text[-1] == '\n':
+                text = text[:-1]
 
             print ">1>", sections
             text, field, newresult, sections, data = \
