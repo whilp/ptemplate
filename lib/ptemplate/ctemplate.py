@@ -7,6 +7,8 @@ class CTemplate(Template):
         "BI_NEWLINE": '\n',
         "BI_SPACE": ' ',
     }
+    options = Template.options.copy()
+    options["swallow-return-before-marker"] = False
 
     def preprocessor(self, input):
         input = input.replace("{", "{{")
