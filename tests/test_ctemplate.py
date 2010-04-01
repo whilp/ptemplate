@@ -2,7 +2,7 @@ from tests import BaseTest
 
 from ptemplate import CTemplate
 
-class TestTemplate(BaseTest):
+class TestCTemplate(BaseTest):
 
     def setUp(self):
         self.template = CTemplate()
