@@ -46,6 +46,20 @@ class TestPFormatter(BaseTest):
             "and after the section"])
         self.assertEqual(output, self.format(input, **data))
 
+    def skip_test_sections_nested(self):
+        data = {}
+        input = '\n'.join([
+            "beginning",
+            "{#outer}",
+            "outer start",
+            "{#inner}",
+            "inner contents",
+            "{/inner}",
+            "outer finish",
+            "{/outer}"
+            "end"])
+        output = ""
+        self.assertEqual(output, self.format(input, **data))
 
     def test_sections_nodata(self):
         data = {}

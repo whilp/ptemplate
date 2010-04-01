@@ -20,7 +20,8 @@ class PFormatter(Formatter):
 
     def formatsection(self, tokenstream, *scopes):
         result = []
-        section = data = None
+        sections = {}
+        data = None
         for text, field, spec, conversion in tokenstream:
             marker = self.markers.get(field and field[0] or '', None)
             fieldname = field
@@ -35,18 +36,20 @@ class PFormatter(Formatter):
                 field = None
             elif marker == "startsection":
                 data = scopes[0].get(field, [])
-                section = []
+                sections[field] = []
             elif marker == "endsection":
-                if section is None:
+                if field not in sections:
                     raise SyntaxError(fieldname)
-                section.append((text, None, None, None))
+                sections[field].append((text, None, None, None))
                 for d in data:
-                    result.append(self.formatsection(section, d, *scopes))
-                section = None
+                    result.append(self.formatsection(sections[field], d, *scopes))
+                del(sections[field])
                 text = ''
 
+            section = sections.get(field, None)
+
             if section is not None and marker != "startsection":
-                section.append((text, field, spec, conversion))
+                sections[field].append((text, field, spec, conversion))
             elif text:
                 result.append(text)
 
