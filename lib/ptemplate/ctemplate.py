@@ -1,3 +1,10 @@
+"""
+Known differences from Google's ctemplate:
+    * no modifiers
+    * no whitespace stripping
+    * no delimiter setting
+"""
+
 from ptemplate.template import Template
 
 __all__ = ["CTemplate"]
