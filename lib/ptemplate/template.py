@@ -50,7 +50,7 @@ class Template(Formatter):
             format_string = preprocessor(format_string)
         return self.formatsection(self.parse(format_string), kwargs)
 
-    def handle_markers(self, text, field, sections, scope, scopes):
+    def handle_markers(self, text, field, sections, data, scopes):
         marker = field and field.marker or None
         result = ''
 
@@ -61,31 +61,31 @@ class Template(Formatter):
         if marker == "comment":
             field = None
         elif marker == "startsection":
-            scope = scopes[0].get(field.name, [])
+            data = scopes[0].get(field.name, [])
             sections.append(Section(field.name, []))
         elif marker == "endsection":
             if not sections or sections[-1].name != field.name:
                 raise SyntaxError(field.full)
             section = sections[-1]
             section.items.append((text, None, None, None))
-            for d in scope:
+            for d in data:
                 result = self.formatsection(section.items, d, *scopes)
             del(sections[-1])
             text = ''
 
-        return text, field, result, sections, scope
+        return text, field, result, sections, data
 
     def formatsection(self, tokenstream, *scopes):
         result = []
         sections = []
-        scope = None
+        data = None
         for text, field, spec, conversion in tokenstream:
             if field is not None:
                 field = Field(field)
 
             print ">1>", sections
-            text, field, newresult, sections, scope = \
-                self.handle_markers(text, field, sections, scope, scopes)
+            text, field, newresult, sections, data = \
+                self.handle_markers(text, field, sections, data, scopes)
             if newresult:
                 result.append(newresult)
             print ">2>", sections
