@@ -42,6 +42,23 @@ and something after the section
         self.assertEqual(self.format("{% this is a comment}"), "")
         self.assertEqual(self.format("{%this is a comment}"), "")
 
+    def test_markers_section_simple(self):
+        data = {
+            "section": [
+                {"a":"b"}, {}, {},
+            ]
+        }
+        # XXX: need to add section text to results if no vars in section.
+        input = '\n'.join([
+            "before the section",
+            "{#section}",
+            "inside the section",
+            "some more text",
+            "{/section}",
+            "and after the section"])
+        self.assertEqual(self.format(input, **data), '')
+
+
     def test_smorgasbord(self):
         self.assertEqual(self.format(self.input, **self.data), 
             '\n'.join([
