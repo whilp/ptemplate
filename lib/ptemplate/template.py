@@ -51,13 +51,18 @@ class Template(Formatter):
         return self.formatsection(self.parse(format_string), kwargs)
 
     def handle_markers(self, text, field, sections, scope, scopes):
-        result = ''
         marker = field and field.marker or None
+        result = ''
+
+        if self.options["swallow-return-before-marker"] and \
+            field and field.marker and text and text[-1] == '\n':
+            text = text[:-1]
+
         if marker == "comment":
             field = None
         elif marker == "startsection":
-            sections.append(Section(field.name, []))
             scope = scopes[0].get(field.name, [])
+            sections.append(Section(field.name, []))
         elif marker == "endsection":
             if not sections or sections[-1].name != field.name:
                 raise SyntaxError(field.full)
@@ -78,12 +83,8 @@ class Template(Formatter):
             if field is not None:
                 field = Field(field)
 
-            if self.options["swallow-return-before-marker"] and \
-                field and field.marker and text and text[-1] == '\n':
-                text = text[:-1]
-
             print ">1>", sections
-            text, field, newresult, newsections, scope = \
+            text, field, newresult, sections, scope = \
                 self.handle_markers(text, field, sections, scope, scopes)
             if newresult:
                 result.append(newresult)
