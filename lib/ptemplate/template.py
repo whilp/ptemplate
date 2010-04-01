@@ -50,10 +50,30 @@ class Template(Formatter):
             format_string = preprocessor(format_string)
         return self.formatsection(self.parse(format_string), kwargs)
 
+    def handle_markers(self, text, field, sections, scope, scopes):
+        result = ''
+        marker = field and field.marker or None
+        if marker == "comment":
+            field = None
+        elif marker == "startsection":
+            sections.append(Section(field.name, []))
+            scope = scopes[0].get(field.name, [])
+        elif marker == "endsection":
+            if not sections or sections[-1].name != field.name:
+                raise SyntaxError(field.full)
+            section = sections[-1]
+            section.items.append((text, None, None, None))
+            for d in scope:
+                result = self.formatsection(section.items, d, *scopes)
+            del(sections[-1])
+            text = ''
+
+        return text, field, result, sections, scope
+
     def formatsection(self, tokenstream, *scopes):
         result = []
         sections = []
-        data = None
+        scope = None
         for text, field, spec, conversion in tokenstream:
             if field is not None:
                 field = Field(field)
@@ -62,25 +82,16 @@ class Template(Formatter):
                 field and field.marker and text and text[-1] == '\n':
                 text = text[:-1]
 
-            marker = field and field.marker or None
-            if marker == "comment":
-                field = None
-            elif marker == "startsection":
-                data = scopes[0].get(field.name, [])
-                sections.append(Section(field.name, []))
-            elif marker == "endsection":
-                if not sections or sections[-1].name != field.name:
-                    raise SyntaxError(field.full)
-                section = sections[-1]
-                section.items.append((text, None, None, None))
-                for d in data:
-                    result.append(self.formatsection(section.items, d, *scopes))
-                del(sections[-1])
-                text = ''
+            print ">1>", sections
+            text, field, newresult, newsections, scope = \
+                self.handle_markers(text, field, sections, scope, scopes)
+            if newresult:
+                result.append(newresult)
+            print ">2>", sections
 
             section = sections and sections[-1] or None
 
-            if section is not None and marker != "startsection":
+            if section is not None and field.marker != "startsection":
                 section.items.append((text, field.name, spec, conversion))
             elif text:
                 result.append(text)
