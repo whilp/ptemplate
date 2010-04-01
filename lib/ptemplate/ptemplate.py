@@ -14,11 +14,15 @@ class PFormatter(Formatter):
     options = {
         "swallow-return-before-marker": True,
     }
+    preprocessor = None
 
     def _vformat(self, format_string, args, kwargs, used, depth):
         if depth < 0:
             raise ValueError("Max string recursion exceeded")
 
+        preprocessor = getattr(self, "preprocessor", None)
+        if callable(preprocessor):
+            format_string = preprocessor(format_string)
         return self.formatsection(self.parse(format_string), kwargs)
 
     def formatsection(self, tokenstream, *scopes):
