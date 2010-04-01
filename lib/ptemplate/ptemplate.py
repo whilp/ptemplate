@@ -17,20 +17,19 @@ class PFormatter(Formatter):
 
     def formatsection(self, tokenstream, *scopes):
         result = []
-        section = None
-        data = None
-
-        # Define marker here so that it carries over between iterations.
-        marker = None
+        section = data = marker = None
         for text, field, spec, conversion in tokenstream:
-            # marker here was defined on the last iteration.
-            if marker != "startsection" and not section and text:
+            oldmarker = marker
+            marker = self.markers.get(field and field[0] or '', None)
+
+            if text and not section and not \
+                ((section == []) and \
+                    (marker is None) and \
+                    (oldmarker == "startsection")):
                 result.append(text)
 
             if field is None:
                 continue
-
-            marker = self.markers.get(field and field[0] or '', None)
 
             # Handle the normal case first.
             if section is None and marker is None:
