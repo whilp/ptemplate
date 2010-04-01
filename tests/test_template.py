@@ -83,7 +83,7 @@ class TestTemplate(BaseTest):
             "end"])
         self.assertEqual(output, self.format(input, **data))
 
-    def test_smorgasbord(self):
+    def skip_test_smorgasbord(self):
         data = {
             "foo": "the foo",
             "results": [
