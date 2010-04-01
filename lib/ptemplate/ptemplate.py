@@ -38,7 +38,7 @@ class PFormatter(Formatter):
                 data = scopes[0].get(field, [])
                 sections["a"] = []
             elif marker == "endsection":
-                if sections.get("a", None) is None:
+                if not "a" in sections:
                     raise SyntaxError(fieldname)
                 sections["a"].append((text, None, None, None))
                 for d in data:
@@ -46,12 +46,12 @@ class PFormatter(Formatter):
                 del(sections["a"])
                 text = ''
 
-            if sections.get("a", None) is not None and marker != "startsection":
+            if "a" in sections and marker != "startsection":
                 sections["a"].append((text, field, spec, conversion))
             elif text:
                 result.append(text)
 
-            if marker or field is None or sections.get("a", None) is not None:
+            if marker or field is None or "a" in sections:
                 continue
 
             obj, _ = self.get_field(field, (), scopes)
