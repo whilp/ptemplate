@@ -46,8 +46,12 @@ class TestPFormatter(BaseTest):
             "and after the section"])
         self.assertEqual(output, self.format(input, **data))
 
-    def skip_test_sections_nested(self):
-        data = {}
+    def test_sections_nested(self):
+        data = {
+            "outer": [
+                {"inner": [ {} ]},
+            ],
+        }
         input = '\n'.join([
             "beginning",
             "{#outer}",
@@ -58,7 +62,12 @@ class TestPFormatter(BaseTest):
             "outer finish",
             "{/outer}"
             "end"])
-        output = ""
+        output = '\n'.join([
+            "beginning",
+            "outer start",
+            "inner contents",
+            "outer finish",
+            "end"])
         self.assertEqual(output, self.format(input, **data))
 
     def test_sections_nodata(self):

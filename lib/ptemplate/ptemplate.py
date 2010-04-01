@@ -57,6 +57,7 @@ class PFormatter(Formatter):
             elif text:
                 result.append(text)
 
+            print ">>>", repr(field), repr(text)
             if marker or field is None or section is not None:
                 continue
 
