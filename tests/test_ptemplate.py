@@ -28,7 +28,6 @@ class TestPFormatter(BaseTest):
                 {"a":"b"}, {}, {},
             ]
         }
-        # XXX: need to add section text to results if no vars in section.
         input = '\n'.join([
             "before the section",
             "{#section}",
