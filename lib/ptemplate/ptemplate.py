@@ -16,6 +16,12 @@ class Template(Formatter):
     }
     preprocessor = None
 
+    def __init__(self, input=''):
+    	self.input = ''
+
+    def render(self, *args, **data):
+        return self.format(self.input, *args, **kwargs)
+
     def _vformat(self, format_string, args, kwargs, used, depth):
         if depth < 0:
             raise ValueError("Max string recursion exceeded")
