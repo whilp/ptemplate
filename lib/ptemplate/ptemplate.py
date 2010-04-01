@@ -22,39 +22,37 @@ class PFormatter(Formatter):
             oldmarker = marker
             marker = self.markers.get(field and field[0] or '', None)
 
-            if text and not section and not \
-                ((section == []) and \
-                    (marker is None) and \
-                    (oldmarker == "startsection")):
-                result.append(text)
+            # If a marker is immediately preceded by a line-return,
+            # swallow it.
+            if marker and text and text[-1] == '\n':
+                text = text[:-1]
 
-            if field is None:
-                continue
-
-            # Handle the normal case first.
-            if section is None and marker is None:
-                obj, _ = self.get_field(field, (), scopes)
-                obj = self.convert_field(obj, conversion)
-                spec = self._vformat(spec, (), scopes[-1], (), 1)
-                result.append(self.format_field(obj, spec))
-                continue
-
-            # The field is part of the extended syntax and requires special
-            # handling.
             if marker == "comment":
-                continue
+                field = None
             elif marker == "startsection":
                 data = scopes[0].get(field[1:], [])
                 section = []
             elif marker == "endsection":
                 if section is None:
                     raise SyntaxError(field)
+                section.append((text, None, None, None))
                 for d in data:
                     result.append(self.formatsection(section, d, *scopes))
                 section = None
+                text = ''
 
             if section is not None and marker != "startsection":
                 section.append((text, field, spec, conversion))
+            elif text:
+                result.append(text)
+
+            if field is None or section is not None:
+                continue
+
+            obj, _ = self.get_field(field, (), scopes)
+            obj = self.convert_field(obj, conversion)
+            spec = self._vformat(spec, (), scopes[-1], (), 1)
+            result.append(self.format_field(obj, spec))
 
         return ''.join(result)
 
