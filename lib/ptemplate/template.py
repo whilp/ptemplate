@@ -55,23 +55,22 @@ class Template(Formatter):
         sections = []
         data = None
         for text, field, spec, conversion in tokenstream:
-            marker = Field.markers.get(field and field[0] or '', None)
-            fieldname = field
-            if marker is not None:
-                field = field[1:]
+            if field is not None:
+                field = Field(field)
 
             if self.options["swallow-return-before-marker"] and \
-                marker and text and text[-1] == '\n':
+                field and field.marker and text and text[-1] == '\n':
                 text = text[:-1]
 
+            marker = field and field.marker or None
             if marker == "comment":
                 field = None
             elif marker == "startsection":
-                data = scopes[0].get(field, [])
-                sections.append(Section(field, []))
+                data = scopes[0].get(field.name, [])
+                sections.append(Section(field.name, []))
             elif marker == "endsection":
-                if not sections or sections[-1].name != field:
-                    raise SyntaxError(fieldname)
+                if not sections or sections[-1].name != field.name:
+                    raise SyntaxError(field.full)
                 section = sections[-1]
                 section.items.append((text, None, None, None))
                 for d in data:
@@ -82,14 +81,14 @@ class Template(Formatter):
             section = sections and sections[-1] or None
 
             if section is not None and marker != "startsection":
-                section.items.append((text, field, spec, conversion))
+                section.items.append((text, field.name, spec, conversion))
             elif text:
                 result.append(text)
 
-            if marker or field is None or section is not None:
+            if field is None or field.marker or section is not None:
                 continue
 
-            obj, _ = self.get_field(field, (), scopes)
+            obj, _ = self.get_field(field.name, (), scopes)
             obj = self.convert_field(obj, conversion)
             spec = self._vformat(spec, (), scopes[-1], (), 1)
             result.append(self.format_field(obj, spec))
