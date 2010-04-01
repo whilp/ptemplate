@@ -1,7 +1,7 @@
 This is html.
 
-{{#SECTION}}
+{#SECTION}
 Happy section
-{{/SEC}}
+{/SEC}
 
 But the section never ends!
