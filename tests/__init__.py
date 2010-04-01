@@ -1,7 +1,15 @@
+import unittest
 try:
-    import unittest2 as unittest
+    import unittest2
 except ImportError:
-    import unittest
+    unittest2 = False
 
 class BaseTest(unittest.TestCase):
     pass
+
+if unittest2:
+    class BaseTest(unittest2.TestCase):
+        
+        def __init__(self, methodName="runTest"):
+            super(BaseTest, self).__init__(methodName)
+            self.addTypeEqualityFunc(str, 'assertMultiLineEqual')
