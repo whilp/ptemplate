@@ -3,6 +3,8 @@ from string import Formatter
 
 __all__ = ["Template"]
 
+Section = namedtuple("Section", "name items")
+
 class Template(Formatter):
     markers = {
         '#': "startsection",
@@ -13,7 +15,6 @@ class Template(Formatter):
         "swallow-return-before-marker": True,
     }
     preprocessor = None
-    Section = namedtuple("Section", "name items")
 
     def __init__(self, input=''):
         self.input = ''
@@ -48,7 +49,7 @@ class Template(Formatter):
                 field = None
             elif marker == "startsection":
                 data = scopes[0].get(field, [])
-                sections.append(self.Section(field, []))
+                sections.append(Section(field, []))
             elif marker == "endsection":
                 if not sections or sections[-1].name != field:
                     raise SyntaxError(fieldname)
