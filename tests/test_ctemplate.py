@@ -32,3 +32,24 @@ class TestCTemplate(TemplateTest):
         data = {}
         input = "hi {{VAR}} lo"
         self.assertProduces(input, "hi  lo", data)
+
+        data["VAR"] = "yo"
+        self.assertProduces(input, "hi yo lo", data)
+
+        data["VAR"] = "yoyo"
+        self.assertProduces(input, "hi yoyo lo", data)
+
+        data["VA"] = "noyo"
+        data["VAR "] = "noyo2"
+        data["var"] = "noyo3"
+        self.assertProduces(input, "hi yoyo lo", data)
+
+    # Skipping TestVariableWithModifiers; modifiers should come eventually.
+
+    def test_section(self):
+        data = {}
+        # Note: The original test uses whitespace stripping.
+        #input = "boo!\nhi {{#SEC}}lo{{#SUBSEC}}jo{{/SUBSEC}}{{/SEC}} bar"
+        input = "boo!hi {{#SEC}}lo{{#SUBSEC}}jo{{/SUBSEC}}{{/SEC}} bar"
+        
+        self.assertProduces(input, "boo!hi  bar", data)
