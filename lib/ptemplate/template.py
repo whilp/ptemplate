@@ -3,9 +3,7 @@ from ptemplate.formatter import Formatter
 __all__ = ["Template"]
 
 class Template(object):
-    options = {
-        "swallow-return-before-marker": True,
-    }
+    options = {}
     preprocessor = None
     
     def __init__(self, template=''):
