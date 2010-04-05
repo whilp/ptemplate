@@ -31,13 +31,13 @@ class TestTemplate(TemplateTest):
             "{/section}",
             "and after the section"])
         output = '\n'.join([
-            "before the section",
+            "before the section\n",
             "inside the section",
-            "some more text",
+            "some more text\n",
             "inside the section",
-            "some more text",
+            "some more text\n",
             "inside the section",
-            "some more text",
+            "some more text\n",
             "and after the section"])
         self.assertProduces(input, output, data)
 
@@ -74,7 +74,7 @@ class TestTemplate(TemplateTest):
             "{/section}",
             "end"])
         output = '\n'.join([
-            "beginning",
+            "beginning\n",
             "end"])
         self.assertProduces(input, output, data)
 
