@@ -57,7 +57,7 @@ class Formatter(string.Formatter):
 
             if text:
                 result.append(text)
-            if token.field is None:
+            if token.field is None or token.marker in ("startsection", "endsection"):
                 continue
 
             # Perform the usual string formatting on the field.
