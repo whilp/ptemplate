@@ -3,7 +3,7 @@ from collections import namedtuple
 
 __all__ = ["Formatter"]
 
-Section = namedtuple("Section", "name tokens scope")
+Section = namedtuple("Section", "name tokens data scopes")
 Token = namedtuple("Token", "text field fieldname marker spec conversion")
 
 class Formatter(string.Formatter):
@@ -19,7 +19,7 @@ class Formatter(string.Formatter):
 
     def _vformat(self, string, args, kwargs):
         tokens = self.tokenize(string)
-        return self.formatsection(tokens, [kwargs])
+        return self.formatsection(tokens, kwargs)
 
     def tokenize(self, string):
         for text, field, spec, conversion in self.parse(string):
@@ -33,20 +33,22 @@ class Formatter(string.Formatter):
                 
             yield Token(text, field, fieldname, marker, spec, conversion)
 
-    def formatsection(self, tokens, scopes):
+    def formatsection(self, tokens, data, scopes=[]):
         result = []
-        section = Section(None, [], None)
+        section = Section(None, None, None, None)
         for token in tokens:
             text = token.text
             if token.marker == "startsection" and section.name is None:
                 # If we're not already tracking a section, track it.
-                section = Section(token.field, [], scopes)
+                d = data.get(token.field, [])
+                section = Section(token.field, [], d, scopes)
             elif token.marker == "endsection" and section.name == token.field:
                 # If the current section closes, add a text-only token to its
                 # list of tokens and format the section.
                 section.tokens.append(Token(text, None, None, None, None, None))
-                result.append(self.formatsection(section.tokens, section.scope))
-                section = Section(None, [], None)
+                for d in section.data:
+                    result.append(self.formatsection(section.tokens, d))
+                section = Section(None, None, None, None)
                 text = None
             elif section.name is not None:
                 # If we're tracking a section, add just add the token to its list
@@ -59,10 +61,12 @@ class Formatter(string.Formatter):
             if token.field is None:
                 continue
 
+            scope = [data] + scopes
+
             # Perform the usual string formatting on the field.
-            obj, _ = self.get_field(token.field, (), scopes)
+            obj, _ = self.get_field(token.field, (), scope)
             obj = self.convert_field(obj, token.conversion)
-            spec = self._vformat(token.spec, (), scopes)
+            spec = self._vformat(token.spec, (), data)
             result.append(self.format_field(obj, spec))
 
         return ''.join(result)
