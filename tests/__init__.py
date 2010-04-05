@@ -10,11 +10,8 @@ class BaseTest(unittest.TestCase):
 class TemplateTest(BaseTest):
     cls = None
 
-    def setUp(self):
-        self.template = self.cls()
-
     def assertProduces(self, input, expect, kwargs={}, args=()):
-        output = self.template.format(input, *args, **kwargs)
+        output = self.cls(input).render(**kwargs)
         self.assertEqual(expect, output)
 
 if unittest2:
