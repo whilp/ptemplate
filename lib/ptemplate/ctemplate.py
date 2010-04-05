@@ -27,7 +27,7 @@ class CTemplate(Template):
 
         return input
 
-    def _vformat(self, format_string, args, kwargs, used, depth):
+    def render(self, **data):
         globals = self.globals.copy()
-        globals.update(kwargs)
-        return super(CTemplate, self)._vformat(format_string, args, globals, used, depth)
+        globals.update(data)
+        return super(CTemplate, self).render(**globals)
