@@ -46,7 +46,7 @@ class Formatter(string.Formatter):
                 # list of tokens and format the section.
                 section.tokens.append(Token(text, None, None, None, None, None))
                 for d in section.data.get(token.field, []):
-                    result.append(self.formatsection(section.tokens, d, [d] + scopes))
+                    result.append(self.formatsection(section.tokens, d, [data] + scopes))
                 section = Section(None, None, None, None)
                 text = None
             elif section.name is not None:
