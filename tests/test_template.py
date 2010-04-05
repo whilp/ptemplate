@@ -98,17 +98,17 @@ class TestTemplate(TemplateTest):
             "{/results}",
             "and something after the section"])
         output = '\n'.join([
-            "\nla la la",
+            "\nla la la\n",
             "this is: letters",
             "this is from a different scope: the foo",
             "one: a",
             "two: b",
-            "and some more text",
+            "and some more text\n",
             "this is: digits",
             "this is from a different scope: the foo",
             "one: 1",
             "two: 2",
-            "and some more text",
+            "and some more text\n",
             "and something after the section",
         ])
         self.assertProduces(input, output, data)
