@@ -40,14 +40,13 @@ class Formatter(string.Formatter):
             text = token.text
             if token.marker == "startsection" and section.name is None:
                 # If we're not already tracking a section, track it.
-                d = data.get(token.field, [])
-                section = Section(token.field, [], d, scopes)
+                section = Section(name=token.field, tokens=[], data=data, scopes=scopes)
             elif token.marker == "endsection" and section.name == token.field:
                 # If the current section closes, add a text-only token to its
                 # list of tokens and format the section.
                 section.tokens.append(Token(text, None, None, None, None, None))
-                for d in section.data:
-                    result.append(self.formatsection(section.tokens, d))
+                for d in section.data.get(token.field, []):
+                    result.append(self.formatsection(section.tokens, d, [d] + scopes))
                 section = Section(None, None, None, None)
                 text = None
             elif section.name is not None:
@@ -61,10 +60,8 @@ class Formatter(string.Formatter):
             if token.field is None:
                 continue
 
-            scope = [data] + scopes
-
             # Perform the usual string formatting on the field.
-            obj, _ = self.get_field(token.field, (), scope)
+            obj, _ = self.get_field(token.field, (), [data] + scopes)
             obj = self.convert_field(obj, token.conversion)
             spec = self._vformat(token.spec, (), data)
             result.append(self.format_field(obj, spec))
@@ -72,9 +69,10 @@ class Formatter(string.Formatter):
         return ''.join(result)
 
     def get_value(self, field, args, scopes):
+        _scopes = list(scopes)
         value = ''
-        while scopes and value == '':
-            scope = scopes.pop()
+        while _scopes and value == '':
+            scope = _scopes.pop(0)
             value = scope.get(field, '')
 
         return value
