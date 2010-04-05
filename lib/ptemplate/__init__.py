@@ -37,4 +37,5 @@ __todo__ = """\
 """
 
 from .ctemplate import *
+from .formatter import *
 from .template import *
