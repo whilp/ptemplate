@@ -51,7 +51,7 @@ class Formatter(string.Formatter):
                 section = Section(None, None, None, None)
                 text = None
             elif section.name is not None:
-                # If we're tracking a section, add just add the token to its list
+                # If we're tracking a section, just add the token to its list
                 # and move on.
                 section.tokens.append(token)
                 continue
