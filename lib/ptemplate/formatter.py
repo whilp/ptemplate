@@ -44,7 +44,8 @@ class Formatter(string.Formatter):
             elif token.marker == "endsection" and section.name == token.field:
                 # If the current section closes, add a text-only token to its
                 # list of tokens and format the section.
-                section.tokens.append(Token(text, None, None, None, None, None))
+                if text:
+                    section.tokens.append(Token(text, None, None, None, None, None))
                 for d in section.data.get(token.field, []):
                     result.append(self.formatsection(section.tokens, d, [data] + scopes))
                 section = Section(None, None, None, None)
