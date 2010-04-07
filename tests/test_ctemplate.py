@@ -53,3 +53,29 @@ class TestCTemplate(TemplateTest):
         input = "boo!hi {{#SEC}}lo{{#SUBSEC}}jo{{/SUBSEC}}{{/SEC}} bar"
         
         self.assertProduces(input, "boo!hi  bar", data)
+
+        data["SEC"]  = [{}]
+        self.assertProduces(input, "boo!hi lo bar", data)
+
+        data["SUBSEC"] = [{}]
+        self.assertProduces(input, "boo!hi lojo bar", data)
+
+    # Skipping TestSectionSeparator; separators probably won't be supported in
+    # the language itself.
+
+    # Skipping TestInclude; include files probably wont' be supported in the
+    # language itself (though it'd be easy).
+    # Skipping TestIncludeWithModifiers; see above.
+    # Skipping TestRecursiveInclude; see above.
+
+    def test_inheritance(self):
+        data = {
+            "FOO": "foo",
+            "SEC": [{
+                "SEC": [{
+                    "blah": "blah",
+                }]
+            }]
+        }
+        input = "{{FOO}}{{#SEC}}{{FOO}}{{#SEC}}{{FOO}}{{/SEC}}{{/SEC}}"
+        self.assertProduces(input, "foofoofoo", data)
