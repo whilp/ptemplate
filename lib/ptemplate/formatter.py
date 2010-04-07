@@ -39,8 +39,7 @@ class Formatter(string.Formatter):
         for token in tokens:
             text = token.text
             section = sections and sections[-1] or Section(None, [], {}, [])
-            if token.marker == "startsection" and section.name is None:
-                # If we're not already tracking a section, track it.
+            if token.marker == "startsection":
                 section = Section(name=token.field, tokens=[], data=data, scopes=scopes)
                 sections.append(section)
             elif token.marker == "endsection" and section.name == token.field:
