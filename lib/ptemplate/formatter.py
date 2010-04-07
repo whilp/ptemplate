@@ -39,30 +39,34 @@ class Formatter(string.Formatter):
         for token in tokens:
             text = token.text
             section = sections and sections[-1] or Section(None, [], {}, [])
-            if token.marker == "startsection":
-                if section.name is not None:
-                    section.tokens.append(Token(text, None, None, None, None, None))
-                    text = None
-                section = Section(name=token.field, tokens=[], data=data, scopes=scopes)
-                sections.append(section)
-            elif token.marker == "endsection" and section.name == token.field:
+
+            if token.marker == "endsection" and section.name == token.field:
                 # If the current section closes, add a text-only token to its
                 # list of tokens and format the section.
                 if text:
                     section.tokens.append(Token(text, None, None, None, None, None))
                 for d in section.data.get(token.field, []):
-                    result.append(self.formatsection(section.tokens, d, [data] + scopes))
+                    a = self.formatsection(section.tokens, d, [data] + scopes)
+                    result.append(a)
                 sections.pop()
                 text = None
-            elif section.name is not None:
+
+            if text:
+                if "\nthis is: " == text:
+                    print ">>>", repr(text), token
+                result.append(text)
+
+            if token.marker == "startsection":
+                section = Section(name=token.field, tokens=[], data=data, scopes=scopes)
+                sections.append(section)
+
+            if token.marker is None and section.name is not None:
                 # If we're tracking a section, just add the token to its list
                 # and move on.
                 section.tokens.append(token)
                 continue
 
-            if text:
-                result.append(text)
-            if token.field is None or token.marker in ("startsection", "endsection"):
+            if token.field is None or token.marker is not None:
                 continue
 
             # Perform the usual string formatting on the field.

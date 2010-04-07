@@ -50,15 +50,15 @@ class TestCTemplate(TemplateTest):
         data = {}
         # Note: The original test uses whitespace stripping.
         #input = "boo!\nhi {{#SEC}}lo{{#SUBSEC}}jo{{/SUBSEC}}{{/SEC}} bar"
-        input = "boo!hi {{#SEC}}lo{{#SUBSEC}}jo{{/SUBSEC}}{{/SEC}} bar"
+        input = "boo!hi {{#SEC}}lo{{#SUBSEC}}jo{{/SUBSEC}}{{/SEC}} bar\n"
         
-        self.assertProduces(input, "boo!hi  bar", data)
+        self.assertProduces(input, "boo!hi  bar\n", data)
 
         data["SEC"]  = [{}]
-        self.assertProduces(input, "boo!hi lo bar", data)
+        self.assertProduces(input, "boo!hi lo bar\n", data)
 
         data["SUBSEC"] = [{}]
-        self.assertProduces(input, "boo!hi lojo bar", data)
+        self.assertProduces(input, "boo!hi lojo bar\n", data)
 
     # Skipping TestSectionSeparator; separators probably won't be supported in
     # the language itself.
