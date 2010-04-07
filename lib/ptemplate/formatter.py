@@ -40,6 +40,9 @@ class Formatter(string.Formatter):
             text = token.text
             section = sections and sections[-1] or Section(None, [], {}, [])
             if token.marker == "startsection":
+                if section.name is not None:
+                    section.tokens.append(Token(text, None, None, None, None, None))
+                    text = None
                 section = Section(name=token.field, tokens=[], data=data, scopes=scopes)
                 sections.append(section)
             elif token.marker == "endsection" and section.name == token.field:
