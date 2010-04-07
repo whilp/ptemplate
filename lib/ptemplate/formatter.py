@@ -37,41 +37,42 @@ class Formatter(string.Formatter):
         sections = []
         result = []
         for token in tokens:
-            text = token.text
             section = sections and sections[-1] or Section(None, [], {}, [])
+            text = token.text
 
-            if token.marker not in (None, "endsection"):
-                result.append(text)
-
-            if token.marker == "startsection":
-                if section.name is not None:
-                    section.tokens.append(Token(text, None, None, None, None, None))
-                    text = None
-                section = Section(name=token.field, tokens=[], data=data, scopes=scopes)
-                sections.append(section)
-            elif token.marker == "endsection" and section.name == token.field:
-                # If the current section closes, add a text-only token to its
-                # list of tokens and format the section.
-                if text:
-                    section.tokens.append(Token(text, None, None, None, None, None))
-                for d in section.data.get(token.field, []):
-                    a = self.formatsection(section.tokens, d, [data] + scopes)
-                    result.append(a)
+            # Short circuit parsing if...
+            if section.name == token.field and token.marker == "endsection":
+                # ...we're closing the current section; render the subsection
+                # and continue.
+                section.tokens.append(Token(text, None, None, None, None, None))
+                _data, _ = self.get_field(token.field, (), [data] + scopes)
+                for d in _data:
+                    result.append(self.formatsection(section.tokens, d, [data] + scopes))
                 sections.pop()
+                continue
             elif section.name is not None:
-                # If we're tracking a section, just add the token to its list
-                # and move on.
+                # ...we're in a section; add our token to the section's list and
+                # continue.
                 section.tokens.append(token)
                 continue
 
-            if token.field is None or token.marker in ("startsection", "endsection"):
-                continue
+            # Always add the token's text to the result. Since the parser produces
+            # tokens with preceding text, this has to happen early.
+            if text:    
+                result.append(text)
 
-            # Perform the usual string formatting on the field.
-            obj, _ = self.get_field(token.field, (), [data] + scopes)
-            obj = self.convert_field(obj, token.conversion)
-            spec = self._vformat(token.spec, (), data)
-            result.append(self.format_field(obj, spec))
+            if token.marker == "startsection":
+                section = Section(name=token.field, tokens=[], data=data, scopes=scopes)
+                sections.append(section)
+            elif token.marker == "endsection":
+                # Already handled.
+                pass
+            elif token.field is not None:
+                # Perform the usual string formatting on the field.
+                obj, _ = self.get_field(token.field, (), [data] + scopes)
+                obj = self.convert_field(obj, token.conversion)
+                spec = self._vformat(token.spec, (), data)
+                result.append(self.format_field(obj, spec))
 
         return ''.join(result)
 
