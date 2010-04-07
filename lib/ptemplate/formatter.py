@@ -36,14 +36,16 @@ class Formatter(string.Formatter):
     def formatsection(self, tokens, data, scopes=[]):
         sections = []
         result = []
+        depth = 0
+
         for token in tokens:
             section = sections and sections[-1] or Section(None, [], {}, [])
             text = token.text
 
             # Short circuit parsing if...
-            if section.name == token.field and token.marker == "endsection":
-                # ...we're closing the current section; render the subsection
-                # and continue.
+            if depth == 0 and section.name == token.field and token.marker == "endsection":
+                # ...we're closing the topmost section (depth=0); render the
+                # subsection and continue.
                 section.tokens.append(Token(text, None, None, None, None, None))
                 _data, _ = self.get_field(token.field, (), [data] + scopes)
                 for d in _data:
@@ -54,6 +56,10 @@ class Formatter(string.Formatter):
                 # ...we're in a section; add our token to the section's list and
                 # continue.
                 section.tokens.append(token)
+
+                # Track depth (but not the subsections themselves).
+                if token.marker == "startsection": depth += 1
+                elif token.marker == "endsection": depth -= 1
                 continue
 
             # Always add the token's text to the result. Since the parser produces
