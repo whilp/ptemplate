@@ -71,7 +71,7 @@ class Formatter(string.Formatter):
                 # Perform the usual string formatting on the field.
                 obj, _ = self.get_field(token.field, (), [data] + scopes)
                 obj = self.convert_field(obj, token.conversion)
-                spec = self._vformat(token.spec, (), data)
+                spec = super(Formatter, self)._vformat(token.spec, (), data, (), 2)
                 result.append(self.format_field(obj, spec))
 
         return ''.join(result)
