@@ -77,5 +77,5 @@ class TestCTemplate(TemplateTest):
                 }]
             }]
         }
-        input = "{{FOO}}{{#SEC}}{{FOO}}{{#SEC}}{{FOO}}{{/SEC}}{{/SEC}}"
-        self.assertProduces(input, "foofoofoo", data)
+        input = "{{FOO}}{{#SEC}}{{FOO}}{{#SEC}}{{FOO}}{{/SEC}}{{/SEC}}\n"
+        self.assertProduces(input, "foofoofoo\n", data)
