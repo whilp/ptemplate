@@ -5,10 +5,14 @@ __all__ = ["Template"]
 class Template(object):
     options = {}
     preprocessor = None
+    converters = {}
     
     def __init__(self, template=''):
         self.template = template
         self.formatter = Formatter()
+
+        for k, v in self.converters.items():
+            self.formatter.converters[k] = v
 
     def render(self, **data):
         template = self.template
