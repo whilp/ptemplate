@@ -10,21 +10,26 @@ class TestCTemplate(TemplateTest):
 
     # The following are ported from Google's template_unittest.cc,
     # starting around line 400.
-    def test_weird_syntax(self):
-        # XXX
-        #self.assertProduces("hi {{{! VAR {{!VAR} }} lo", "hi { lo")
 
+    def test_weird_syntax_triple_nested(self):
+        self.skipTest("needs better-than-naive preprocessor")
+        self.assertProduces("hi {{{! VAR {{!VAR} }} lo", "hi { lo")
+
+    def test_weird_syntax_triple(self):
         self.assertProduces("fn(){{{BI_NEWLINE}} x=4;{{BI_NEWLINE}}}",
             "fn(){\n x=4;\n}")
 
-        # XXX
-        #self.assertProduces("{{{{{{VAR}}}}}}}}", "{{{{}}}}}}")
+    def test_weird_syntax_tons_of_brackets(self):
+        self.skipTest("needs better-than-naive preprocessor")
+        self.assertProduces("{{{{{{VAR}}}}}}}}", "{{{{}}}}}}")
 
     def test_comment(self):
         self.assertProduces("hi {{!VAR}} lo", "hi  lo")
         self.assertProduces("hi {{!VAR {VAR} }} lo", "hi  lo")
-        # XXX
-        #self.assertProduces("hi {{! VAR {{!VAR} }} lo", "hi  lo")
+
+    def test_comment_nested(self):
+        self.skipTest("needs better-than-naive preprocessor")
+        self.assertProduces("hi {{! VAR {{!VAR} }} lo", "hi  lo")
 
     # Skipping TestSetMarkerDelimiters; no plans to support that feature.
 
