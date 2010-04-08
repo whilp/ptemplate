@@ -3,7 +3,7 @@ from collections import namedtuple
 
 __all__ = ["Formatter"]
 
-Section = namedtuple("Section", "name tokens data scopes conversion")
+Section = namedtuple("Section", "name tokens data scopes conversion format")
 Token = namedtuple("Token", "text field fieldname marker spec conversion")
 
 class Formatter(string.Formatter):
@@ -39,7 +39,7 @@ class Formatter(string.Formatter):
         depth = 0
 
         for token in tokens:
-            section = sections and sections[-1] or Section(None, [], {}, [], None)
+            section = sections and sections[-1] or Section(None, [], {}, [], None, None)
             text = token.text
 
             # Short circuit parsing if...
@@ -72,7 +72,7 @@ class Formatter(string.Formatter):
 
             if token.marker == "startsection":
                 section = Section(name=token.field, tokens=[], data=data,
-                    scopes=scopes, conversion=token.conversion)
+                    scopes=scopes, conversion=token.conversion, format=token.spec)
                 sections.append(section)
             elif token.marker == "endsection":
                 # Already handled.
