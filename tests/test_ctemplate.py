@@ -25,45 +25,59 @@ class TestCTemplate(TemplateTest):
 
     def test_comment(self):
         self.assertProduces("hi {{!VAR}} lo", "hi  lo")
-        self.assertProduces("hi {{!VAR {VAR} }} lo", "hi  lo")
 
     def test_comment_nested(self):
+        self.assertProduces("hi {{!VAR {VAR} }} lo", "hi  lo")
+
+    def test_comment_nested_broken(self):
         self.skipTest("needs better-than-naive preprocessor")
         self.assertProduces("hi {{! VAR {{!VAR} }} lo", "hi  lo")
 
     # Skipping TestSetMarkerDelimiters; no plans to support that feature.
 
-    def test_variable(self):
-        data = {}
-        input = "hi {{VAR}} lo"
-        self.assertProduces(input, "hi  lo", data)
+class TestCTemplateVariables(TemplateTest):
+    cls = CTemplate
 
-        data["VAR"] = "yo"
-        self.assertProduces(input, "hi yo lo", data)
+    def setUp(self):
+        self.data = {}
+        self.input = "hi {{VAR}} lo"
 
-        data["VAR"] = "yoyo"
-        self.assertProduces(input, "hi yoyo lo", data)
+    def test_variable_nodata(self):
+        self.assertProduces(self.input, "hi  lo", self.data)
 
-        data["VA"] = "noyo"
-        data["VAR "] = "noyo2"
-        data["var"] = "noyo3"
-        self.assertProduces(input, "hi yoyo lo", data)
+    def test_variable_simple(self):
+        self.data["VAR"] = "yo"
+        self.assertProduces(self.input, "hi yo lo", self.data)
+
+    def test_variable_similar(self):
+        self.data["VAR"] = "yoyo"
+        self.data["VA"] = "noyo"
+        self.data["VAR "] = "noyo2"
+        self.data["var"] = "noyo3"
+        self.assertProduces(self.input, "hi yoyo lo", self.data)
 
     # Skipping TestVariableWithModifiers; modifiers should come eventually.
 
-    def test_section(self):
-        data = {}
+class TestCTemplateSection(TemplateTest):
+    cls = CTemplate
+
+    def setUp(self):
+        self.data = {}
         # Note: The original test uses whitespace stripping.
         #input = "boo!\nhi {{#SEC}}lo{{#SUBSEC}}jo{{/SUBSEC}}{{/SEC}} bar"
-        input = "boo!hi {{#SEC}}lo{{#SUBSEC}}jo{{/SUBSEC}}{{/SEC}} bar\n"
-        
-        self.assertProduces(input, "boo!hi  bar\n", data)
+        self.input = "boo!hi {{#SEC}}lo{{#SUBSEC}}jo{{/SUBSEC}}{{/SEC}} bar\n"
 
-        data["SEC"]  = [{}]
-        self.assertProduces(input, "boo!hi lo bar\n", data)
+    def test_section_nodata(self):
+        self.assertProduces(self.input, "boo!hi  bar\n", self.data)
 
-        data["SUBSEC"] = [{}]
-        self.assertProduces(input, "boo!hi lojo bar\n", data)
+    def test_section_outerdata(self):
+        self.data["SEC"]  = [{}]
+        self.assertProduces(self.input, "boo!hi lo bar\n", self.data)
+
+    def test_section_innerdata(self):
+        self.data["SEC"]  = [{}]
+        self.data["SUBSEC"] = [{}]
+        self.assertProduces(self.input, "boo!hi lojo bar\n", self.data)
 
     # Skipping TestSectionSeparator; separators probably won't be supported in
     # the language itself.
@@ -73,8 +87,11 @@ class TestCTemplate(TemplateTest):
     # Skipping TestIncludeWithModifiers; see above.
     # Skipping TestRecursiveInclude; see above.
 
-    def test_inheritance(self):
-        data = {
+class TestCTemplateInheritance(TemplateTest):
+    cls = CTemplate
+
+    def setUp(self):
+        self.data = {
             "FOO": "foo",
             "SEC": [{
                 "SEC": [{
@@ -82,5 +99,7 @@ class TestCTemplate(TemplateTest):
                 }]
             }]
         }
-        input = "{{FOO}}{{#SEC}}{{FOO}}{{#SEC}}{{FOO}}{{/SEC}}{{/SEC}}\n"
-        self.assertProduces(input, "foofoofoo\n", data)
+        self.input = "{{FOO}}{{#SEC}}{{FOO}}{{#SEC}}{{FOO}}{{/SEC}}{{/SEC}}\n"
+
+    def test_inheritance(self):
+        self.assertProduces(self.input, "foofoofoo\n", self.data)
