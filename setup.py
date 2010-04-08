@@ -31,6 +31,9 @@ setup_options = {
     "install_requires": pkg.__requires__,
     "entry_points": """
         # -*- Entry points: -*-
+        [python.templating.engines]
+        ptemplate = ptemplate.template:Template
+        ctemplate = ptemplate.ctemplate:CTemplate
     """,
     "test_suite": "tests",
 }
