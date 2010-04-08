@@ -29,3 +29,11 @@ class TemplateTest(BaseTest):
     def assertProduces(self, input, expect, kwargs={}, args=()):
         output = self.cls(input).render(**kwargs)
         self.assertEqual(expect, output)
+
+class ModifierTest(TemplateTest):
+    
+    def assertProduces(self, input, expect, kwargs={}, args=(), converters={}):
+        templater = self.cls(input)
+        templater.formatter.converters.update(converters)
+        output = templater.render(**kwargs)
+        self.assertEqual(expect, output)
