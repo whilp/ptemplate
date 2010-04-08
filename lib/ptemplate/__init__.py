@@ -5,20 +5,28 @@
 __project__ = "ptemplate"
 __version__ = "0.1"
 __pkg__ = "ptemplate"
-__description__ = ""
-__author__ = ""
-__author_email__ = ""
-__url__ = ""
+__description__ = "data-based templating"
+__author__ = "Will Maier"
+__author_email__ = "willmaier@ml1.net"
+__url__ = "http://code.lfod.us/ptemplate"
 
 # See http://pypi.python.org/pypi?%3Aaction=list_classifiers.
-__classifiers__ = [] 
-__keywords__ = ""
+__classifiers__ = """\
+Development Status :: 3 - Alpha
+Environment :: Web Environment :: Buffet
+Intended Audience :: Developers
+License :: OSI Approved :: MIT License
+Natural Language :: English
+Programming Language :: Python
+Topic :: Text Processing
+""".splitlines()
+__keywords__ = "template text json data"
 
 __requires__ = []
 
 # The following is modeled after the ISC license.
 __copyright__ = """\
-Copyright (c) CCYY YOUR NAME HERE <user@your.dom.ain>
+Copyright (c) 2010 Will Maier <willmaier@ml1.net>
 
 Permission to use, copy, modify, and distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
