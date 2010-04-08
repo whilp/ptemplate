@@ -14,8 +14,10 @@ class TestTemplate(TemplateTest):
         self.assertProduces("{dne}", "")
 
     def test_markers_comment(self):
-        self.assertProduces("{% this is a comment}", "")
         self.assertProduces("{%this is a comment}", "")
+
+    def test_markers_comment_space(self):
+        self.assertProduces("{% this is a comment}", "")
 
     def test_sections_simple(self):
         data = {
