@@ -7,6 +7,7 @@ Section = namedtuple("Section", "name tokens data scopes conversion format")
 Token = namedtuple("Token", "text field fieldname marker spec conversion")
 
 class Formatter(string.Formatter):
+    converters = {}
     markers = {
         '#': "startsection",
         '/': "endsection",
@@ -52,6 +53,8 @@ class Formatter(string.Formatter):
                     content = self.formatsection(section.tokens, d, [data] + scopes)
                     if section.conversion:
                         content = self.convert_field(content, section.conversion)
+                    if section.format:
+                        content = self.format_field(content, section.format)
                     result.append(content)
                 sections.pop()
                 continue
@@ -93,4 +96,12 @@ class Formatter(string.Formatter):
             scope = _scopes.pop(0)
             value = scope.get(field, '')
 
+        return value
+
+    def convert_field(self, value, conversion):
+        converter = self.converters.get(conversion, None)
+        if callable(converter):
+            value = converter(value)
+        else:
+            value = super(Formatter, self).convert_field(value, conversion)
         return value
