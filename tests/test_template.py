@@ -1,4 +1,4 @@
-from tests import TemplateTest
+from tests import ModifierTest, TemplateTest
 
 from ptemplate import Template
 
@@ -114,3 +114,22 @@ class TestTemplate(TemplateTest):
             "and something after the section",
         ])
         self.assertProduces(input, output, data)
+
+class TestModifierHTMLEscape(ModifierTest):
+    cls = Template
+
+    def setUp(self):
+        import webob
+        self.converters = {"h": webob.html_escape}
+
+    def test_modifier_variable_html_escape(self):
+        input = """<div class="foo">{foo!h}</div>"""
+        data = {"foo": """<a href="http://www.example.com/foo">foo</a>"""}
+        output = """<div class="foo">&lt;a href=&quot;http://www.example.com/foo&quot;&gt;foo&lt;/a&gt;</div>"""
+        self.assertProduces(input, output, data, converters=self.converters)
+
+    def test_modifier_section_html_escape(self):
+        input = """<div class="foo">{#foo!h}inside{bar}{/foo}</div>"""
+        data = {"foo": [{"bar": "<p>one!</p>"}, {"bar": "<p>two!</p>"}]}
+        output = """<div class="foo">inside&lt;p&gt;one!&lt;/p&gt;inside&lt;p&gt;two!&lt;/p&gt;</div>"""
+        self.assertProduces(input, output, data, converters=self.converters)
