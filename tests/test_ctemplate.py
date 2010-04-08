@@ -103,3 +103,12 @@ class TestCTemplateInheritance(TemplateTest):
 
     def test_inheritance(self):
         self.assertProduces(self.input, "foofoofoo\n", self.data)
+
+    def test_inheritance_two_levels(self):
+        self.data["SEC"][0]["FOO"] = "bar"
+        self.assertProduces(self.input, "foobarbar\n", self.data)
+
+    def test_inheritance_three_levels(self):
+        self.data["SEC"][0]["FOO"] = "bar"
+        self.data["SEC"][0]["SEC"][0]["FOO"] = "baz"
+        self.assertProduces(self.input, "foobarbaz\n", self.data)
