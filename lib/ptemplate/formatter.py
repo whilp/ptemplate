@@ -49,7 +49,10 @@ class Formatter(string.Formatter):
                 section.tokens.append(Token(text, None, None, None, None, None))
                 _data, _ = self.get_field(token.field, (), [data] + scopes)
                 for d in _data:
-                    result.append(self.formatsection(section.tokens, d, [data] + scopes))
+                    content = self.formatsection(section.tokens, d, [data] + scopes)
+                    if section.conversion:
+                        content = self.convert_field(content, section.conversion)
+                    result.append(content)
                 sections.pop()
                 continue
             elif section.name is not None:
