@@ -4,8 +4,12 @@ try:
 except ImportError:
     unittest2 = False
 
+import warnings
+
 class BaseTest(unittest.TestCase):
-    pass
+
+    def skipTest(self, reason):
+        pass
 
 if unittest2:
     class BaseTest(unittest2.TestCase):
@@ -13,6 +17,11 @@ if unittest2:
         def __init__(self, methodName="runTest"):
             super(BaseTest, self).__init__(methodName)
             self.addTypeEqualityFunc(str, 'assertMultiLineEqual')
+
+        def skipTest(self, reason):
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                super(BaseTest, self).skipTest(reason)
 
 class TemplateTest(BaseTest):
     cls = None
