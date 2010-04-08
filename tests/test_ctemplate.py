@@ -112,3 +112,34 @@ class TestCTemplateInheritance(TemplateTest):
         self.data["SEC"][0]["FOO"] = "bar"
         self.data["SEC"][0]["SEC"][0]["FOO"] = "baz"
         self.assertProduces(self.input, "foobarbaz\n", self.data)
+
+    # Skipping TestTemplateString; not relevant.
+    # Skipping TestExpand; not relevant.
+    # Skipping TestAnnotation; not relevant.
+
+class TestCTemplateRegTest(TemplateTest):
+	
+	def setUp(self):
+		# Defined in template_regtest.cc lines 224..
+		self.data = {
+			"HEAD": "   This is the head   ",
+			"FOOTER_BAR_TEXT": [{
+				"BODY": "Should never be shown",
+				"HOME_LINK": "<b>Time to go home!</b>", # html_escape
+				"ADVERTISE_LINK": "<b>Be advertiser #2</b>",
+				"ABOUT_GOOGLE_LINK": "<A HREF=/>About Google!</A>",
+			}],
+			"PROMO_LICENSING_SECTION": [{
+				"PROMO_LICENSING_LINK": "<A HREF='foo'>",
+			}],
+			"TRIM_LINE_COLOR": "Who cares?",
+			"TRIM_LINE_HEIGHT": 10,
+			"MODIFIED_BY_GOOGLE": 2005,
+			"MSG_copyright": "&copy; Google Inc. (all rights reserved)",
+			"CLOSING_DIV_SECTION": [{}],
+			"LATENCY_PREFETCH_URL": "/latency",
+			"LATENCY_PREFETCH": [{}],
+			"JAVASCRIPT_FOOTER_SECTION": [{
+				"FAST_NEXT_JAVASCRIPT": [{}],
+			}],
+		}
