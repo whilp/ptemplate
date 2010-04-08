@@ -25,7 +25,7 @@ class CTemplate(Template):
 
         return input
 
-    def render(self, **data):
+    def render(self, data, format="html", fragment=False, template=None):
         globals = self.globals.copy()
         globals.update(data)
-        return super(CTemplate, self).render(**globals)
+        return super(CTemplate, self).render(globals)
