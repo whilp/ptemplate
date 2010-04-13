@@ -18,9 +18,9 @@ users::
 
     $ git clone http://github.com/wcmaier/ptemplate.git
 
-.. _github.com:		http://github.com/wcmaier/ptemplate.git
-.. _bitbucket.org:	http://bitbucket.org/lt_kije/ptemplate/
-.. _git:        	http://git-scm.com/
+.. _github.com:     http://github.com/wcmaier/ptemplate.git
+.. _bitbucket.org:  http://bitbucket.org/lt_kije/ptemplate/
+.. _git:            http://git-scm.com/
 
 And for `Mercurial`_ users::
 
@@ -34,3 +34,60 @@ Both github and bitbucket provide feeds of changes to the project; for example::
 
 If you'd like to contribute an improvement to :mod:`ptemplate`, please consider using
 either of the above services. Otherwise, send an email to willmaier@ml1.net.
+
+A quick tour of :mod:`ptemplate`'s features
+-------------------------------------------
+
+.. highlight:: python
+
+Simple extension of Python's advanced string formatting API (:pep:`3101`):
+    
+    TODO: example here
+
+Content filtering system (eg HTML sanitization):
+
+    TODO: example here
+
+Basic compatibility with Google's _`ctemplate`:
+
+    TODO: example here
+
+.. _ctemplate:      http://code.google.com/p/google-ctemplate/
+
+Basic usage
+-----------
+
+ctemplate support
+-----------------
+
+Differences with ctemplate
+++++++++++++++++++++++++++
+
+API
+---
+
+.. automodule:: ptemplate.formatter
+    :members:
+    :show-inheritance:
+
+.. automodule:: ptemplate.template
+    :members:
+    :show-inheritance:
+
+.. automodule:: ptemplate.ctemplate
+    :members:
+    :show-inheritance:
+
+Testing :mod:`ptemplate`
+------------------------
+
+:mod:`ptemplate` ships with a number of unit tests that help ensure that the
+code runs correctly. The tests live in the :mod:`tests` package and can be run
+by ``setup.py``::
+    
+    $ python setup.py test
+
+All new code in :mod:`ptemplate` should be accompanied by unit and/or functional
+tests. Note that many of the unit tests included here are ported from Google's
+ctemplate (and run against the :mod:`ptemplate.ctemplate` interface). Ideally,
+:mod:`ptemplate` should pass as many of ctemplate's tests as possible.
