@@ -1,20 +1,36 @@
-.. %PROJECT% documentation master file, created by
-   sphinx-quickstart on Thu Oct 22 14:35:55 2009.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+:mod:`ptemplate` --- lightweight, data-driven templating
+========================================================
 
-Welcome to %PROJECT%'s documentation!
-======================================
+.. automodule:: ptemplate
 
-Contents:
+Installing :mod:`ptemplate`
+---------------------------
 
-.. toctree::
-   :maxdepth: 2
+.. highlight:: none
 
-Indices and tables
-==================
+You can install the latest stable version of :mod:`ptemplate` using :command:`pip`::
+    
+    $ pip install ptemplate
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+Mirrors of the project's repository are hosted at `github.com`_ and `bitbucket.org`_
+-- feel free to clone and issue pull requests at either service. For `git`_
+users::
 
+    $ git clone http://github.com/wcmaier/ptemplate.git
+
+.. _github.com:		http://github.com/wcmaier/ptemplate.git
+.. _bitbucket.org:	http://bitbucket.org/lt_kije/ptemplate/
+.. _git:        	http://git-scm.com/
+
+And for `Mercurial`_ users::
+
+    $ hg clone http://bitbucket.org/lt_kije/ptemplate/
+
+.. _Mercurial:  http://mercurial.selenic.com/
+
+Both github and bitbucket provide feeds of changes to the project; for example::
+
+    http://github.com/wcmaier/ptemplate/commits/master.atom
+
+If you'd like to contribute an improvement to :mod:`ptemplate`, please consider using
+either of the above services. Otherwise, send an email to willmaier@ml1.net.
