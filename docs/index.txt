@@ -196,8 +196,54 @@ messages), :mod:`ptemplate.formatter` may be sufficient on its own.
     :members:
     :show-inheritance:
 
-Testing :mod:`ptemplate`
-------------------------
+Developing :mod:`ptemplate`
+---------------------------
+
+Syncing with github and bitbucket
++++++++++++++++++++++++++++++++++
+
+Even though all development of :mod:`ptemplate` occurs in a Mercurial
+repository, it's useful to provide a git mirror on Github, the very popular
+hosting service. This mirror (as well as the Mercurial mirror on bitbucket) is
+kept in sync using Mercurial `hooks`_ and `hg-git`_. First, a local mirror is
+created of the main Mercurial repository::
+
+	$ hg clone -U . .mirror
+
+The mirror clone does not need to have a working directory, so the :option:`-U`
+flag is passed to the clone subcommand. Then, the main repository's default path
+is set to point to the local mirror::
+	
+    $ cat <<EOF >| .hg/hgrc
+    [paths]
+    default = .mirror
+    EOF
+
+Finally, the mirror is configured to push to the hosting services every time it
+receives a new changegroup (ie, when we push from the master to the mirror)::
+
+    $ cat <<EOF >| .mirror/.hg/hgrc
+    [paths]
+    github = git+ssh://git@github.com/wcmaier/ptemplate.git
+    bitbucket = ssh://hg@bitbucket.org/lt_kije/ptemplate
+
+    [hooks]
+    changegroup.updatemaster = hg bookmark -f -r default master
+    changegroup.bitbucket = hg push bitbucket
+    changegroup.github = hg push github
+    EOF
+
+Now, when new changesets are pushed to the mirror, it will update the 'master'
+bookmark and push to Github and bitbucket. It is important to update the master
+bookmark before attempting to push to a git repository because Mercurial
+bookmarks (which hg-git uses to compare against the git master revision) are not
+updated when the mirror repository receives a push.
+
+.. _hooks:		http://www.selenic.com/mercurial/hgrc.5.html#hooks
+.. _hg-git:		http://hg-git.github.com/
+
+Running the tests
++++++++++++++++++
 
 :mod:`ptemplate` ships with a number of unit tests that help ensure that the
 code runs correctly. The tests live in the :mod:`tests` package and can be run
@@ -209,3 +255,5 @@ All new code in :mod:`ptemplate` should be accompanied by unit and/or functional
 tests. Note that many of the unit tests included here are ported from Google's
 ctemplate (and run against the :mod:`ptemplate.ctemplate` interface). Ideally,
 :mod:`ptemplate` should pass as many of ctemplate's tests as possible.
+
+
