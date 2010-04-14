@@ -70,7 +70,12 @@ Content filtering system (eg HTML sanitization):
 
 Basic compatibility with Google's _`ctemplate`:
 
-    TODO: example here
+    >>> from ptemplate.ctemplate import CTemplate
+    >>> template = """Google is {{#section}}{{something}}, {{/section}}"""
+    >>> templater = CTemplate(template=template)
+    >>> data = {"section": [{"something": "not evil"},{"something": "a company"}]}
+    >>> templater.render(data)
+    'Google is not evil, a company, '
 
 .. _ctemplate:      http://code.google.com/p/google-ctemplate/
 
