@@ -66,8 +66,7 @@ class Template(object):
         the Template.
         """
 
-        for k, v in self.converters.items():
-            self.formatter.converters[k] = v
+        self.formatter.converters.update(self.converters)
 
     def render(self, data, format="html", fragment=False, template=None):
         """Render the template using *data*.
