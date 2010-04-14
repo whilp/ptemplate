@@ -1,10 +1,10 @@
 """\
 ptemplate is a lightweight templating engine for Python, heavily inspired by
-Google's `ctemplate <http://google-ctemplate.googlecode.com/>`_ language. Like
-ctemplate, ptemplate strongly separates the application's logic and
-presentation. At its heart, ptemplate is an extension of Python's new string
-formatting facility -- it builds upon the interpreter's built-in formatters to
-provide a fast, expressive, content-agnostic templating system.
+Google's `ctemplate <http://google-ctemplate.googlecode.com/>`_ language.
+Like ctemplate, ptemplate strongly separates the application's logic and
+presentation. At its heart, ptemplate is an extension of Python's advanced
+string formatting facility -- it extends the interpreter's built-in formatters
+to provide a fast, expressive, content-agnostic templating system.
 """
 
 __project__ = "ptemplate"

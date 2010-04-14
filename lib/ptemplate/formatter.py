@@ -84,6 +84,11 @@ class Formatter(string.Formatter):
 
     If a token's conversion string matches a key in this dictionary, :meth:`convert_field`
     will use the converter instead of the usual string conversion.
+
+    .. note::
+        
+        Keys in this dictionary must be one character in length (to match
+        :meth:`str._formatter_parser`'s expectations for format flags).
     """
     markers = {
         '#': "startsection",
@@ -203,7 +208,7 @@ class Formatter(string.Formatter):
         return ''.join(result)
 
     def get_value(self, field, args, scopes):
-        """Lookup the value of *field* in *scopes*.
+        """Look up the value of *field* in *scopes*.
 
         *scopes* is a list of data dictionaries associated with each successive
         parent of the current section. :meth:`get_value` searches for a key

@@ -1,5 +1,5 @@
 """\
-:mod:`ptemplate.template` -- advanecd string templating
+:mod:`ptemplate.template` -- advanced string templating
 -------------------------------------------------------
 
 :mod:`ptemplate.template` provides a :class:`Template`, a thin interface on top
@@ -72,7 +72,7 @@ class Template(object):
     def render(self, data, format="html", fragment=False, template=None):
         """Render the template using *data*.
 
-        The *format*, *fragement* and *template* arguments are ignored. Instead,
+        The *format*, *fragment* and *template* arguments are ignored. Instead,
         :class:`Template` uses :attr:`template` as the template, passing it to
         :attr:`preprocessor` if necessary. It then expands the template (using
         :attr:`formatter`) and returns the result as a string.

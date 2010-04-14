@@ -61,12 +61,18 @@ Content filtering system (eg HTML sanitization)::
 
     >>> import cgi
     >>> from ptemplate.template import Template
-    >>> template = """something dangerous: {content!h}"""
-    >>> templater = Template(template=template)
+    >>> templater = Template()
     >>> templater.converters["h"] = cgi.escape
-    >>> content = """<p>some HTML from the wild</p>"""
-    >>> templater.render({"content": content}, template=template)
+
+    >>> data = {"content": """<p>some HTML from the wild</p>"""}
+    >>> templater.template = """something dangerous: {content!h}"""
+    >>> templater.render(data)
     'something dangerous: &lt;p&gt;some HTML from the wild&lt;/p&gt;'
+
+    >>> data = {"section": [{"example": "<p>paragraph</p>"},{"example": "no html here"}]}
+    >>> templater.template = """you can sanitize entire sections, too ({#section!h}{example} {/section})"""
+    >>> templater.render(data)
+    'you can sanitize entire sections, too (&lt;p&gt;paragraph&lt;/p&gt; no html here )'
 
 Basic compatibility with Google's _`ctemplate`::
 
@@ -82,14 +88,50 @@ Basic compatibility with Google's _`ctemplate`::
 Basic usage
 -----------
 
+Despite its simple syntax, templates processed by :mod:`ptemplate` can still
+produce very complex documents. Unlike most template systems, :mod:`ptemplate`
+encourages you to keep application logic where it belongs -- in your
+application. Expansion of the template is controlled solely by the structure of
+your data. This keeps the templating engine itself simple and fast and makes
+writing and debugging your templates even easier. For more on the philosophy
+behind data-driven templating systems, see "`How To Use the Google Template
+System <http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html>`_".
+
 ctemplate support
 -----------------
 
-Differences with ctemplate
-++++++++++++++++++++++++++
+Since :mod:`ptemplate` and Google's ctemplate are so similar internally,
+it's fairly easy to process ctemplate templates with :mod:`ptemplate`.
+In fact, with a very naive preprocessor, :mod:`ptemplate.ctemplate` can
+pass many of Google's ctemplate unittests. To expand ctemplate(-like)
+templates, use :class:`ptemplate.ctemplate.CTemplate` instead of
+:class:`ptemplate.template.Template`.
+
+.. note::
+    
+    :class:`ptemplate.ctemplate.CTemplate` does not provide full ctemplate
+    compatibility. See the class documentation for specific exceptions.
 
 API
 ---
+
+You have access to the templating system at three levels. First, you can
+interact directly with :class:`ptemplate.formatter.Formatter`, which
+offers an interface very similar to Python's advanced string formatting
+(:class:`string.Formatter`, :pep:`3101`). Second, you can work with (or
+subclass) :class:`ptemplate.template.Template`, a thin wrapper around
+the formatter that also adds a Buffet-style API. Lastly, you can use
+:class:`ptemplate.ctemplate.CTemplate`. :class:`~ptemplate.ctemplate.CTemplate`
+extends :class:`~ptemplate.template.Template` with a preprocessor that
+supports a subset of Google's ctemplate system. :mod:`~ptemplate.ctemplate`
+also provides a nice example for subclassing and extending the basic
+:mod:`~ptemplate.template`.
+
+For a typical use case, :mod:`ptemplate.template` is probably most useful as it
+provides a familiar API. :mod:`ptemplate.ctemplate` should (with, perhaps, a few
+changes to the preprocessor) support many simple templates written for Google's
+ctemplate system. For smaller projects (or doing things like formatting error
+messages), :mod:`ptemplate.formatter` may be sufficient on its own.
 
 .. automodule:: ptemplate.formatter
     :members:

@@ -11,6 +11,7 @@ This module implements a templating interface similar Google's `ctemplate
 * the templater does not strip whitespace (except by modifiers)
 * includes are not supported
 * pragmas/macros are not supported
+* separator sections are not supported
 
 Like ctemplate, :class:`CTemplate` expands a string template to match the
 structure of a dictionary (using :class:`ptemplate.template.Template`). Data dictionaries
@@ -65,7 +66,7 @@ class CTemplate(Template):
 
         Since ctemplate and :mod:`ptemplate.template` are quite similar
         internally, a simple translation can make a document (mostly) legible.
-        At the moment, the preprocessor only converts the marker indictators
+        At the moment, the preprocessor only converts the marker indicators
         ('{{' and '}}') and comment character ('!').
         """
         input = input.replace("{", "{{")
