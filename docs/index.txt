@@ -48,6 +48,15 @@ Simple extension of Python's advanced string formatting API (:pep:`3101`):
     >>> formatter.format(template, var="foo")
     'normal variable substitution: foo'
 
+    >>> template = """{#section}this is {something} {/section}"""
+    >>> data = {"section": [{"something": "fast"}, {"something": "easy"}, {"something": "simple"}]}
+    >>> formatter.format(template, **data)
+    'this is fast this is easy this is simple '
+
+    >>> template = """{%this is a comment}"""
+    >>> formatter.format(template, **{})
+    ''
+
 Content filtering system (eg HTML sanitization):
 
     TODO: example here
