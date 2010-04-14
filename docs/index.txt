@@ -40,7 +40,7 @@ A quick tour of :mod:`ptemplate`'s features
 
 .. highlight:: python
 
-Simple extension of Python's advanced string formatting API (:pep:`3101`):
+Simple extension of Python's advanced string formatting API (:pep:`3101`)::
 
     >>> from ptemplate.formatter import Formatter
     >>> formatter = Formatter()
@@ -57,7 +57,7 @@ Simple extension of Python's advanced string formatting API (:pep:`3101`):
     >>> formatter.format(template, **{})
     ''
 
-Content filtering system (eg HTML sanitization):
+Content filtering system (eg HTML sanitization)::
 
     >>> import cgi
     >>> from ptemplate.template import Template
@@ -68,7 +68,7 @@ Content filtering system (eg HTML sanitization):
     >>> templater.render({"content": content}, template=template)
     'something dangerous: &lt;p&gt;some HTML from the wild&lt;/p&gt;'
 
-Basic compatibility with Google's _`ctemplate`:
+Basic compatibility with Google's _`ctemplate`::
 
     >>> from ptemplate.ctemplate import CTemplate
     >>> template = """Google is {{#section}}{{something}}, {{/section}}"""
