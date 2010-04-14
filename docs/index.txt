@@ -41,8 +41,11 @@ A quick tour of :mod:`ptemplate`'s features
 .. highlight:: python
 
 Simple extension of Python's advanced string formatting API (:pep:`3101`):
-    
-    TODO: example here
+
+	>>> from ptemplate.formatter import Formatter
+	>>> formatter = Formatter()
+	>>> template = """normal variable substitution: {var}"""
+	>>> formatter.format(template, {"var": "foo"}
 
 Content filtering system (eg HTML sanitization):
 
