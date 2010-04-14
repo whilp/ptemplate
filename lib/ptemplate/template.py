@@ -1,9 +1,9 @@
 """\
-:mod:`ptemplate.template` -- ctemplate-like interface
------------------------------------------------------
+:mod:`ptemplate.template` -- advanecd string templating
+-------------------------------------------------------
 
 :mod:`ptemplate.template` provides a :class:`Template`, a thin interface on top
-:mod:`ptemplate.of formatter` that is more useful for typical templating tasks.
+:mod:`ptemplate.formatter` that is more useful for typical templating tasks.
 """
 
 __license__ = """Copyright (c) 2010 Will Maier <will@m.aier.us>
@@ -50,7 +50,8 @@ class Template(object):
     converters = {}
     """A dictionary of object converters.
 
-    These converters will be passed to the templates :attr:`formatter` instance.
+    These converters will be passed to the template's
+    :class:`ptemplate.formatter.Formatter` instance.
     """
     
     def __init__(self, extra_vars_func=None, options=None, template=''):

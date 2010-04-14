@@ -2,8 +2,8 @@
 :mod:`ptemplate.ctemplate` -- ctemplate-like interface
 ------------------------------------------------------
 
-This module implements a templating interface similar Google's _`ctemplate
-<http://google-ctemplate.googlecode.com/>` with a few important exceptions:
+This module implements a templating interface similar Google's `ctemplate
+<http://google-ctemplate.googlecode.com/>`_ with a few important exceptions:
 
 * templates may not change the field delimiter
 * modifiers are marked with '!'
@@ -13,7 +13,7 @@ This module implements a templating interface similar Google's _`ctemplate
 * pragmas/macros are not supported
 
 Like ctemplate, :class:`CTemplate` expands a string template to match the
-structure of a dictionary (using :mod:`ptemplate.template`). Data dictionaries
+structure of a dictionary (using :class:`ptemplate.template.Template`). Data dictionaries
 may contain either lists of other data dictionaries or single values (string,
 integer, float, etc). Plain variables are substituted according to the usual
 Python string formatting rules (see :pep:`3101`). Sections (fields preceded by
