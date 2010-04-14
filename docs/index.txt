@@ -97,6 +97,57 @@ writing and debugging your templates even easier. For more on the philosophy
 behind data-driven templating systems, see "`How To Use the Google Template
 System <http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html>`_".
 
+All of the :mod:`ptemplate` interfaces take a single data dictionary and use it
+to expand a simple string template. The data dictionary's keys are plain
+strings; its values are either strings or lists of other data dictionaries.
+Other objects may be used as values, but they will be converted to strings
+before being inserted into the template. String values are substituted for
+variables in the template. List values control the number of iterations (and
+scope) of section variables.
+
+Templates are composed of plain text with (optional) variable and section
+markers. :mod:`ptemplate` markers must all be valid field names as described in
+:pep:`3101` and begin and end with '{' and '}', respectively. Special fields
+denoting comments and the beginning and end of sections are marked with a
+single-character indicator ('!', '#', '/'). Comment fields are ignored
+completely. Sections are expanded once for each data dictionary found in evaluation
+scope.
+
+Variable expansion proceeds from the innermost context to the outermost; if no
+match is found, an empty string is substituted instead. Variables defined within
+a section will first attempt to match keys in that section's dictionary. If no
+match is found, the dictionary in which the section is defined will be searched
+for a match. This process continues until all dictionaries (or "scopes") are
+exhausted.
+
+For example, this deeply nested data dictionary produces the following::
+
+    >>> from ptemplate.template import Template
+    >>> templater = Template()
+
+    >>> data = {
+    ...     "outer": [
+    ...         {"foo": "foo",
+    ...         "middle": [
+    ...             {"foo": "bar",
+    ...             "inner": [
+    ...                 {"foo": "baz"},
+    ...             ]},
+    ...         ]},
+    ...     ]}
+    >>> template = """{#outer}outer: {foo} {#middle}middle: {foo} {#inner}inner: {foo} {/inner}{/middle}{/outer}"""
+    >>> templater.template = template
+    >>> templater.render(data)
+    'outer: foo middle: bar inner: baz '
+
+At each level, a new value for "foo" is defined. If the innermost value is
+removed, though, the next-highest value is used::
+
+    >>> data["outer"][0]["middle"][0]["inner"][0].pop("foo")
+    'baz'
+    >>> templater.render(data)
+    'outer: foo middle: bar inner: bar '
+
 ctemplate support
 -----------------
 
