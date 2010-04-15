@@ -56,7 +56,6 @@ def cheetah(dirname, verbose=False):
     try:
         from Cheetah.Template import Template
     except ImportError:
-        print>>sys.stderr, 'Cheetah not installed, skipping'
         return lambda: None
     class MyTemplate(Template):
         def serverSidePath(self, path): return os.path.join(dirname, path)
@@ -77,7 +76,6 @@ def clearsilver(dirname, verbose=False):
     try:
         import neo_cgi
     except ImportError:
-        print>>sys.stderr, 'ClearSilver not installed, skipping'
         return lambda: None
     neo_cgi.update()
     import neo_util
@@ -102,7 +100,6 @@ def django(dirname, verbose=False):
         from django.conf import settings
         settings.configure(TEMPLATE_DIRS=[os.path.join(dirname, 'templates')])
     except ImportError:
-        print>>sys.stderr, 'Django not installed, skipping'
         return lambda: None
     from django import template, templatetags
     from django.template import loader
@@ -122,7 +119,6 @@ def kid(dirname, verbose=False):
     try:
         import kid
     except ImportError:
-        print>>sys.stderr, "Kid not installed, skipping"
         return lambda: None
     kid.path = kid.TemplatePath([dirname])
     template = kid.load_template('template.kid').Template
@@ -140,7 +136,6 @@ def simpletal(dirname, verbose=False):
     try:
         from simpletal import simpleTAL, simpleTALES
     except ImportError:
-        print>>sys.stderr, "SimpleTAL not installed, skipping"
         return lambda: None
     fileobj = open(os.path.join(dirname, 'base.html'))
     base = simpleTAL.compileHTMLTemplate(fileobj)
@@ -167,7 +162,6 @@ def ptemplate(dirname, verbose=False):
     try:
         from ptemplate.template import Template
     except ImportError:
-        sys.stderr.write('ptemplate not installed, skipping\n')
         return lambda: None
 
     def read(fname):
@@ -204,7 +198,6 @@ def ctemplate(dirname, verbose=False):
     try:
         from ptemplate.ctemplate import CTemplate
     except ImportError:
-        sys.stderr.write('ctemplate not installed, skipping\n')
         return lambda: None
 
     def read(fname):
@@ -241,15 +234,17 @@ def run(engines, number=2000, verbose=False):
         if verbose:
             print '%s:' % engine.capitalize()
             print '--------------------------------------------------------'
-        else:
-            print '%s:' % engine.capitalize(),
         t = timeit.Timer(setup='from __main__ import %s; render = %s(r"%s", %s)'
                                % (engine, engine, dirname, verbose),
                          stmt='render()')
         time = t.timeit(number=number) / number
         if verbose:
             print '--------------------------------------------------------'
-        print '%.2f ms' % (1000 * time)
+        if time < 0.00001:
+            result = '   (not installed?)'
+        else:
+            result = '%16.2f ms' % (1000 * time)
+        print '%-35s %s' % (engine.capitalize(), result)
         if verbose:
             print '--------------------------------------------------------'
 
