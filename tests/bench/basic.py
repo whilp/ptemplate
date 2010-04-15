@@ -268,6 +268,6 @@ if __name__ == '__main__':
         stats = hotshot.stats.load("template.prof")
         stats.strip_dirs()
         stats.sort_stats('time', 'calls')
-        stats.print_stats(.05)
+        stats.print_stats()
     else:
         run(engines, verbose=verbose)
