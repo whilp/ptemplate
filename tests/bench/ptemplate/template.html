@@ -1,0 +1,23 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <title>{title}</title>
+  </head>
+  <body>
+{header}
+  
+    {#users}
+    <p>Hello, {user!h}!</p>
+    {/users}
+    
+    <h2>Loop</h2>
+      <ul>
+{#items}
+        <li{#last} class="last"{/last}>{item!h}</li>
+{/items}
+      </ul>
+{footer}
+  </body>
+</html>

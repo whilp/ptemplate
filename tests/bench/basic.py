@@ -10,7 +10,7 @@ import sys
 import timeit
 
 __all__ = ['clearsilver', 'mako', 'django', 'kid', 'genshi', 'genshi_text',
-           'simpletal']
+           'simpletal', 'ptemplate', 'ctemplate']
 
 def genshi(dirname, verbose=False):
     from genshi.template import TemplateLoader
@@ -160,6 +160,78 @@ def simpletal(dirname, verbose=False):
 
     if verbose:
         print render()
+    return render
+
+def ptemplate(dirname, verbose=False):
+    import cgi
+    try:
+        from ptemplate.template import Template
+    except ImportError:
+        sys.stderr.write('ptemplate not installed, skipping\n')
+        return lambda: None
+
+    def read(fname):
+        f = open(os.path.join(dirname, fname), 'r')
+        template = Template(template=f.read())
+        template.converters["h"] = cgi.escape
+
+        return template
+
+    def render():
+        template = read("template.html")
+        header = read("header.html")
+        footer = read("footer.html")
+        data = {
+            "title": "Just a test",
+            "user": "joe",
+            "users": [{"user": u} for u in "joe me world".split()],
+            "items": [{"item": "Number %d" % num} for num in range(1, 15)]
+        }
+        data["items"][-1]["last"] = [{}]
+        data["header"] = header.render(data)
+        data["footer"] = footer.render(data)
+        return template.render(data)
+
+    if verbose:
+        print render()
+
+    return render
+
+    return
+
+def ctemplate(dirname, verbose=False):
+    import cgi
+    try:
+        from ptemplate.ctemplate import CTemplate
+    except ImportError:
+        sys.stderr.write('ctemplate not installed, skipping\n')
+        return lambda: None
+
+    def read(fname):
+        f = open(os.path.join(dirname, fname), 'r')
+        template = CTemplate(template=f.read())
+        template.converters["h"] = cgi.escape
+
+        return template
+
+    def render():
+        template = read("template.html")
+        header = read("header.html")
+        footer = read("footer.html")
+        data = {
+            "title": "Just a test",
+            "user": "joe",
+            "users": [{"user": u} for u in "joe me world".split()],
+            "items": [{"item": "Number %d" % num} for num in range(1, 15)]
+        }
+        data["items"][-1]["last"] = [{}]
+        data["header"] = header.render(data)
+        data["footer"] = footer.render(data)
+        return template.render(data)
+
+    if verbose:
+        print render()
+
     return render
 
 def run(engines, number=2000, verbose=False):
