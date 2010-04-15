@@ -45,6 +45,16 @@ try:
 except ImportError:
     MakoTemplate = None
 
+try:
+    from ptemplate.template import Template as PTemplate
+except ImportError:
+    PTemplate = None
+
+try:
+    from ptemplate.ctemplate import CTemplate
+except ImportError:
+    CTemplate = None
+
 table = [dict(a=1,b=2,c=3,d=4,e=5,f=6,g=7,h=8,i=9,j=10)
           for x in range(1000)]
 
@@ -97,6 +107,50 @@ if MakoTemplate:
     def test_mako():
         """Mako Template"""
         mako_tmpl.render(table=table)
+
+if PTemplate:
+    import cgi
+    escape = lambda field: cgi.escape(str(field))
+    PTemplate.converters.update({"h": escape})
+    ptmpl = PTemplate(template="""\
+<table>
+{#rows}
+    <tr>
+{#columns}
+        <td>{col!h}
+{/columns}
+    </tr>
+{/rows}
+</table>
+""")
+    data = {
+        "rows": [{"columns": [{"col": v} for v in r.values()]} for r in table],
+    }
+    def test_ptemplate():
+        """PTemplate"""
+        ptmpl.render(data)
+
+if CTemplate:
+    import cgi
+    escape = lambda field: cgi.escape(str(field))
+    CTemplate.converters.update({"h": escape})
+    ctmpl = CTemplate(template="""\
+<table>
+{{#rows}}
+    <tr>
+{{#columns}}
+        <td>{{col!h}}
+{{/columns}}
+    </tr>
+{{/rows}}
+</table>
+""")
+    data = {
+        "rows": [{"columns": [{"col": v} for v in r.values()]} for r in table],
+    }
+    def test_ctemplate():
+        """CTemplate"""
+        ctmpl.render(data)
 
 def test_genshi():
     """Genshi template"""
@@ -198,7 +252,8 @@ if neo_cgi:
 def run(which=None, number=10):
     tests = ['test_builder', 'test_genshi', 'test_genshi_text',
              'test_genshi_builder', 'test_mako', 'test_kid', 'test_kid_et',
-             'test_et', 'test_cet', 'test_clearsilver', 'test_django']
+             'test_et', 'test_cet', 'test_clearsilver', 'test_django',
+             'test_ptemplate', 'test_ctemplate']
 
     if which:
         tests = filter(lambda n: n[5:] in which, tests)
