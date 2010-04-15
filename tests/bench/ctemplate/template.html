@@ -10,14 +10,14 @@
   
     {{#users}}
     <p>Hello, {{user!h}}!</p>
-    {/users}}
+    {{/users}}
     
     <h2>Loop</h2>
       <ul>
-{#items}
-        <li{#last} class="last"{/last}>{item!h}</li>
-{/items}
+{{#items}}
+        <li{{#last}} class="last"{{/last}}>{{item!h}}</li>
+{{/items}}
       </ul>
-{footer}
+{{footer}}
   </body>
 </html>
