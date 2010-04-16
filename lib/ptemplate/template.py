@@ -83,14 +83,14 @@ class Template(object):
             template = preprocessor(template)
         return self.formatter.format(template, **data)
 
-    def transform(self, info, template):
+    def transform(self, info, template): # pragma: nocover
         """Render the output to Elements.
 
         Required by Buffet; not supported.
         """
         raise NotImplementedError
 
-    def load_template(self, templatename):
+    def load_template(self, templatename): # pragma: nocover
         """Find a template specified in Python 'dot' notation.
 
         Required by Buffet; not supported.
