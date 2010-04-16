@@ -133,3 +133,18 @@ class TestModifierHTMLEscape(ModifierTest):
         data = {"foo": [{"bar": "<p>one!</p>"}, {"bar": "<p>two!</p>"}]}
         output = """<div class="foo">inside&lt;p&gt;one!&lt;/p&gt;inside&lt;p&gt;two!&lt;/p&gt;</div>"""
         self.assertProduces(input, output, data, converters=self.converters)
+
+class TestFormatting(TemplateTest):
+    cls = Template
+    
+    def test_variable_formatting(self):
+        input = """->{foo:^15}<-"""
+        data = {"foo": "center this"}
+        output = "->  center this  <-"
+        self.assertProduces(input, output, data)
+    
+    def test_section_formatting(self):
+        input = """->{#section:^5}|{foo}|{/section}<-"""
+        data = {"section": [{"foo": "a"},{"foo": "b"},{"foo": "c"}]}
+        output = "-> |a|  |b|  |c| <-"
+        self.assertProduces(input, output, data)
