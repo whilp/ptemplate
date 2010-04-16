@@ -195,7 +195,7 @@ class Formatter(string.Formatter):
                 section = Section(name=token.field, tokens=[], data=data,
                     scopes=scopes, conversion=token.conversion, format=token.spec)
                 sections.append(section)
-            elif token.marker == "endsection":
+            elif token.marker == "endsection": # pragma: nocover
                 # Already handled.
                 pass
             elif token.field is not None:
