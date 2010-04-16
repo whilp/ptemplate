@@ -1,3 +1,4 @@
+-*- restructuredtext -*-
 
 ``ptemplate`` --- lightweight, data-driven templating
 *****************************************************
