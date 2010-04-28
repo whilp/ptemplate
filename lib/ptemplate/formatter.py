@@ -26,6 +26,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 import string
 from collections import namedtuple
 
+from ptemplate.util import logger
+
 __all__ = ["Formatter", "Section", "Token"]
 
 Section = namedtuple("Section", "name tokens data scopes conversion format")
@@ -103,6 +105,10 @@ class Formatter(string.Formatter):
     """
     markerlen = 1
     """The length of a marker indicator."""
+
+    def __init__(self, *args, **kwargs):
+        super(Formatter, self).__init__(*args, **kwargs)
+        self.log = logger(__name__, self)
 
     def vformat(self, string, args, kwargs):
         """Format *string* according to data in *args* and *kwargs*.

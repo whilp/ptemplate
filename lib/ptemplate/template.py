@@ -23,6 +23,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 """
 
 from ptemplate.formatter import Formatter
+from ptemplate.util import logger
 
 __all__ = ["Template"]
 
@@ -55,6 +56,7 @@ class Template(object):
     """
     
     def __init__(self, extra_vars_func=None, options=None, template=''):
+        self.log = logger(__name__, self)
         self.options = options
         self.template = template
         self.formatter = Formatter()

@@ -39,6 +39,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 """
 
 from ptemplate.template import Template
+from ptemplate.util import logger
 
 __all__ = ["CTemplate"]
 
@@ -60,6 +61,10 @@ class CTemplate(Template):
     BI_NEWLINE and BI_SPACE, which match the space and newline characters,
     respectively (as in ctemplate).
     """
+
+    def __init__(self, *args, **kwargs):
+        super(CTemplate, self).__init__(*args, **kwargs)
+        self.log = logger(__name__, self)
 
     def preprocessor(self, input):
         """Convert Google's ctemplate syntax.
