@@ -58,7 +58,7 @@ class CTemplate(Template):
 
     Template variables that don't match keys in the main data dictionary may
     match global keys as a last resort. By default, :attr:`globals` contains
-    BI_NEWLINE and BI_SPACE, which match the space and newline characters,
+    BI_NEWLINE and BI_SPACE, which match the newline and space characters,
     respectively (as in ctemplate).
     """
 
