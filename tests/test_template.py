@@ -60,9 +60,9 @@ class TestTemplate(TemplateTest):
             "{/outer}"
             "end"])
         output = '\n'.join([
-            "beginning",
-            "outer start",
-            "inner contents",
+            "beginning\n",
+            "outer start\n",
+            "inner contents\n",
             "outer finish",
             "end"])
         self.assertProduces(input, output, data)
