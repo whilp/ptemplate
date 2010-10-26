@@ -19,12 +19,12 @@ users::
     $ git clone http://github.com/wcmaier/ptemplate.git
 
 .. _github.com:     http://github.com/wcmaier/ptemplate.git
-.. _bitbucket.org:  http://bitbucket.org/lt_kije/ptemplate/
+.. _bitbucket.org:  http://bitbucket.org/wcmaier/ptemplate/
 .. _git:            http://git-scm.com/
 
 And for `Mercurial`_ users::
 
-    $ hg clone http://bitbucket.org/lt_kije/ptemplate/
+    $ hg clone http://bitbucket.org/wcmaier/ptemplate/
 
 .. _Mercurial:  http://mercurial.selenic.com/
 
