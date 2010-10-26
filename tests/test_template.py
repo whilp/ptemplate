@@ -1,6 +1,6 @@
 from tests import ModifierTest, TemplateTest
 
-from ptemplate import Template
+from ptemplate.template import Template
 
 class TestTemplate(TemplateTest):
     cls = Template
