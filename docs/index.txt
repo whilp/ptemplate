@@ -236,3 +236,16 @@ The test system was:
 * OpenBSD 4.7-current
 * Python 2.6.3
 
+
+See also
+--------
+
+There have been several other efforts to bring ctemplate-like templates to
+Python. For example:
+
+ * `pystache`_, which implements the `Mustache`_ syntax; and
+ * `python-ctemplate`_, which wraps ctemplate's C++ interface.
+
+.. _pystache:           http://github.com/defunkt/pystache/
+.. _Mustache:           http://mustache.github.com/
+.. _python-ctemplate:   http://code.google.com/p/python-ctemplate/
