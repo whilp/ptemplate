@@ -1,4 +1,3 @@
-import unittest2 as unittest
 try:
     import setuptools
 except ImportError:
