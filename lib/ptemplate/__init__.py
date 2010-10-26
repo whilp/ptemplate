@@ -8,7 +8,7 @@ to provide a fast, expressive, content-agnostic templating system.
 """
 
 __project__ = "ptemplate"
-__version__ = "0.1"
+__version__ = "0.1.0"
 __pkg__ = "ptemplate"
 __description__ = "data-based templating"
 __author__ = "Will Maier"
