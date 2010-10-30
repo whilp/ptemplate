@@ -184,8 +184,12 @@ ctemplate system. For smaller projects (or doing things like formatting error
 messages), :mod:`ptemplate.formatter` may be sufficient on its own.
 
 .. automodule:: ptemplate.formatter
-    :members:
+    :members: Formatter
     :show-inheritance:
+
+.. autoclass:: ptemplate.formatter.Section
+
+.. autoclass:: ptemplate.formatter.Token
 
 .. automodule:: ptemplate.template
     :members:
