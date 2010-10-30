@@ -110,7 +110,7 @@ markers. :mod:`ptemplate` markers must all be valid field names as described in
 :pep:`3101` and begin and end with '{' and '}', respectively. Special fields
 denoting comments and the beginning and end of sections are marked with a
 single-character indicator ('!', '#', '/'). Comment fields are ignored
-completely. Sections are expanded once for each data dictionary found in evaluation
+completely. Sections are expanded once for each data dictionary found in the evaluation
 scope.
 
 Variable expansion proceeds from the innermost context to the outermost; if no
