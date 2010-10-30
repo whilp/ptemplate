@@ -106,12 +106,12 @@ variables in the template. List values control the number of iterations (and
 scope) of section variables.
 
 Templates are composed of plain text with (optional) variable and section
-markers. :mod:`ptemplate` markers must all be valid field names as described in
-:pep:`3101` and begin and end with '{' and '}', respectively. Special fields
-denoting comments and the beginning and end of sections are marked with a
-single-character indicator ('!', '#', '/'). Comment fields are ignored
-completely. Sections are expanded once for each data dictionary found in the evaluation
-scope.
+markers. :mod:`ptemplate` markers must all be valid field names as described
+in :pep:`3101` and begin and end with '{' and '}', respectively. Special
+fields denoting comments and the beginning and end of sections are marked
+with a single-character indicator ('!', '#', '/'). Comment fields are ignored
+completely. Sections are expanded once for each data dictionary found in the
+evaluation scope.
 
 Variable expansion proceeds from the innermost context to the outermost; if no
 match is found, an empty string is substituted instead. Variables defined within
