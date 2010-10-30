@@ -19,12 +19,12 @@ users::
     $ git clone http://github.com/wcmaier/ptemplate.git
 
 .. _github.com:     http://github.com/wcmaier/ptemplate.git
-.. _bitbucket.org:  http://bitbucket.org/lt_kije/ptemplate/
+.. _bitbucket.org:  http://bitbucket.org/wcmaier/ptemplate/
 .. _git:            http://git-scm.com/
 
 And for `Mercurial`_ users::
 
-    $ hg clone http://bitbucket.org/lt_kije/ptemplate/
+    $ hg clone http://bitbucket.org/wcmaier/ptemplate/
 
 .. _Mercurial:  http://mercurial.selenic.com/
 
@@ -106,12 +106,12 @@ variables in the template. List values control the number of iterations (and
 scope) of section variables.
 
 Templates are composed of plain text with (optional) variable and section
-markers. :mod:`ptemplate` markers must all be valid field names as described in
-:pep:`3101` and begin and end with '{' and '}', respectively. Special fields
-denoting comments and the beginning and end of sections are marked with a
-single-character indicator ('!', '#', '/'). Comment fields are ignored
-completely. Sections are expanded once for each data dictionary found in evaluation
-scope.
+markers. :mod:`ptemplate` markers must all be valid field names as described
+in :pep:`3101` and begin and end with '{' and '}', respectively. Special
+fields denoting comments and the beginning and end of sections are marked
+with a single-character indicator ('!', '#', '/'). Comment fields are ignored
+completely. Sections are expanded once for each data dictionary found in the
+evaluation scope.
 
 Variable expansion proceeds from the innermost context to the outermost; if no
 match is found, an empty string is substituted instead. Variables defined within
@@ -173,10 +173,9 @@ offers an interface very similar to Python's advanced string formatting
 subclass) :class:`ptemplate.template.Template`, a thin wrapper around
 the formatter that also adds a Buffet-style API. Lastly, you can use
 :class:`ptemplate.ctemplate.CTemplate`. :class:`~ptemplate.ctemplate.CTemplate`
-extends :class:`~ptemplate.template.Template` with a preprocessor that
-supports a subset of Google's ctemplate system. :mod:`~ptemplate.ctemplate`
-also provides a nice example for subclassing and extending the basic
-:mod:`~ptemplate.template`.
+extends :class:`~ptemplate.template.Template` with a preprocessor that supports
+a subset of Google's ctemplate system. :mod:`~ptemplate.ctemplate` also
+demonstrates how to subclass and extend the basic :mod:`~ptemplate.template`.
 
 For a typical use case, :mod:`ptemplate.template` is probably most useful as it
 provides a familiar API. :mod:`ptemplate.ctemplate` should (with, perhaps, a few
@@ -185,8 +184,12 @@ ctemplate system. For smaller projects (or doing things like formatting error
 messages), :mod:`ptemplate.formatter` may be sufficient on its own.
 
 .. automodule:: ptemplate.formatter
-    :members:
+    :members: Formatter
     :show-inheritance:
+
+.. autoclass:: ptemplate.formatter.Section
+
+.. autoclass:: ptemplate.formatter.Token
 
 .. automodule:: ptemplate.template
     :members:
@@ -196,85 +199,8 @@ messages), :mod:`ptemplate.formatter` may be sufficient on its own.
     :members:
     :show-inheritance:
 
-Developing :mod:`ptemplate`
----------------------------
-
-Syncing with github and bitbucket
-+++++++++++++++++++++++++++++++++
-
-Even though all development of :mod:`ptemplate` occurs in a Mercurial
-repository, it's useful to provide a git mirror on Github, the very popular
-hosting service. This mirror (as well as the Mercurial mirror on bitbucket) is
-kept in sync using Mercurial `hooks`_ and `hg-git`_. First, a local mirror is
-created of the main Mercurial repository::
-
-	$ hg clone -U . .mirror
-
-The mirror clone does not need to have a working directory, so the :option:`-U`
-flag is passed to the clone subcommand. Then, the main repository's default path
-is set to point to the local mirror::
-	
-    $ cat <<EOF >| .hg/hgrc
-    [paths]
-    default = .mirror
-    EOF
-
-Finally, the mirror is configured to push to the hosting services every time it
-receives a new changegroup (ie, when we push from the master to the mirror)::
-
-    $ cat <<EOF >| .mirror/.hg/hgrc
-    [paths]
-    github = git+ssh://git@github.com/wcmaier/ptemplate.git
-    bitbucket = ssh://hg@bitbucket.org/lt_kije/ptemplate
-
-    [hooks]
-    changegroup.updatemaster = hg bookmark -f -r default master
-    changegroup.bitbucket = hg push bitbucket
-    changegroup.github = hg push github
-    EOF
-
-Now, when new changesets are pushed to the mirror, it will update the 'master'
-bookmark and push to Github and bitbucket. It is important to update the master
-bookmark before attempting to push to a git repository because Mercurial
-bookmarks (which hg-git uses to compare against the git master revision) are not
-updated when the mirror repository receives a push.
-
-.. _hooks:      http://www.selenic.com/mercurial/hgrc.5.html#hooks
-.. _hg-git:     http://hg-git.github.com/
-
-Running the tests
-+++++++++++++++++
-
-:mod:`ptemplate` ships with a number of unit tests that help ensure that the
-code runs correctly. The tests live in the :mod:`tests` package and can be run
-by ``setup.py``::
-    
-    $ python setup.py test
-
-All new code in :mod:`ptemplate` should be accompanied by unit and/or functional
-tests. Note that many of the unit tests included here are ported from Google's
-ctemplate (and run against the :mod:`ptemplate.ctemplate` interface). Ideally,
-:mod:`ptemplate` should pass as many of ctemplate's tests as possible.
-
-You can get a sense for how completely the unit tests exercise :mod:`ptemplate`
-by running the coverage_ tool::
-
-    $ coverage run --branch setup.py test
-
-``coverage`` tracks the code statements and branches that the test suite
-touches and can generate a report listing the lines of code that are
-missed::
-
-    $ coverage report -m --omit "tests,/home/will/lib,lib/cli/ext,setup"
-
-It's useful to omit the third party code directory (``ext``) as well as
-the path to the Python standard library as well as ``setup.py`` and the
-tests themselves.
-
-.. _coverage:   http://nedbatchelder.com/code/coverage/
-
 Running the benchmark
-+++++++++++++++++++++
+---------------------
 
 The :mod:`ptemplate` repository contains a port of the `Genshi benchmark suite`_.
 To run the benchmarks::
@@ -313,3 +239,16 @@ The test system was:
 * OpenBSD 4.7-current
 * Python 2.6.3
 
+
+See also
+--------
+
+There have been several other efforts to bring ctemplate-like templates to
+Python. For example:
+
+ * `pystache`_, which implements the `Mustache`_ syntax; and
+ * `python-ctemplate`_, which wraps ctemplate's C++ interface.
+
+.. _pystache:           http://github.com/defunkt/pystache/
+.. _Mustache:           http://mustache.github.com/
+.. _python-ctemplate:   http://code.google.com/p/python-ctemplate/

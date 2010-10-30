@@ -1,6 +1,6 @@
 from tests import TemplateTest
 
-from ptemplate import CTemplate
+from ptemplate.ctemplate import CTemplate
 
 class TestCTemplate(TemplateTest):
     cls = CTemplate

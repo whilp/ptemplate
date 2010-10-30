@@ -24,7 +24,10 @@ import ptemplate as pkg
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ["sphinx.ext.autodoc"]
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx']
+
+# Intersphinx stuff.
+intersphinx_mapping = {'http://docs.python.org/': None}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

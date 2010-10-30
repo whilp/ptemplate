@@ -13,7 +13,7 @@ __pkg__ = "ptemplate"
 __description__ = "data-based templating"
 __author__ = "Will Maier"
 __author_email__ = "willmaier@ml1.net"
-__url__ = "http://code.lfod.us/ptemplate"
+__url__ = "http://packages.python.org/ptemplate"
 
 # See http://pypi.python.org/pypi?%3Aaction=list_classifiers.
 __classifiers__ = """\
@@ -48,7 +48,3 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 __todo__ = """\
 """
-
-from .ctemplate import *
-from .formatter import *
-from .template import *
