@@ -175,7 +175,7 @@ the formatter that also adds a Buffet-style API. Lastly, you can use
 :class:`ptemplate.ctemplate.CTemplate`. :class:`~ptemplate.ctemplate.CTemplate`
 extends :class:`~ptemplate.template.Template` with a preprocessor that
 supports a subset of Google's ctemplate system. :mod:`~ptemplate.ctemplate`
-also provides a nice example for subclassing and extending the basic
+also demonstrates how to subclass and extend the basic
 :mod:`~ptemplate.template`.
 
 For a typical use case, :mod:`ptemplate.template` is probably most useful as it
