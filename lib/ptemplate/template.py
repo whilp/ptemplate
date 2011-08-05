@@ -83,6 +83,7 @@ class Template(object):
         preprocessor = getattr(self, "preprocessor", None)
         if callable(preprocessor):
             template = preprocessor(template)
+        self.formatter.converters.update(self.converters)
         return self.formatter.format(template, **data)
 
     def transform(self, info, template): # pragma: nocover
